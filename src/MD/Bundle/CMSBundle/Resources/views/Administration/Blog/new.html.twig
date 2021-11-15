@@ -1,0 +1,111 @@
+{% extends 'AdminTemplateBundle::base.html.twig' %}
+{% set page_title %}News creation{% endset %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/admintemplate/assets/plugins/validator/bootstrapValidator.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body -%}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-bubble4"></i> {{ page_title }}</h6>
+        </div>
+        <div class="panel-body">
+            <form class="form bootstrap-validator-form" id="validation" action="{{ path('blog_create') }}" role="form" method="POST" {{ form_enctype(form) }}>
+                {{ form_widget(form) }}
+                 <div class="form-group">
+                    <label for="md_bundle_cmsbundle_blog_brief">Brief</label>
+                    <textarea name="brief" id="brief" data-theme="bbcode"  class="form-control"></textarea>   
+                </div>
+                 {{ form_widget(formSeo) }}
+                <div class="form-group text-right">
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check"></i> Create</button>
+                    <button class="btn btn-danger" type="reset"><i class="fa fa-refresh"></i> Reset</button>
+                </div>
+            </form>
+            <div >
+                <a href="{{ path('blog') }}" class="btn btn-warning">Back to the list</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/validator/bootstrapValidator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/slug/jquery.slug.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#validation').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    "md_bundle_cmsbundle_blog[title]": {
+                        validators: {
+                            notEmpty: {
+                                message: 'This field is required and can\'t be empty'
+                            },
+                        }
+                    },
+                    "md_bundle_cmsbundle_blog[content]": {
+                        validators: {
+                            notEmpty: {
+                                message: 'This field is required and can\'t be empty'
+                            },
+                        }
+                    },
+                    "md_bundle_cmsbundle_blog[htmlslug]": {
+                        validators: {
+                            notEmpty: {
+                                message: 'This field is required and can\'t be empty'
+                            }
+                        }
+                    },
+                    "md_bundle_cmsbundle_blog[htmlMeta]": {
+                        validators: {
+                            notEmpty: {
+                                message: 'This field is required and can\'t be empty'
+                            }
+                        }
+                    },
+                }
+            });
+
+            $("#md_bundle_cmsbundle_blog_title").slug({
+                slug: 'slug', // class of input / span that contains the generated slug 
+                hide: false        // hide the text input, true by default 
+            });
+
+            /** BEGIN INPUT FILE **/
+            if ($('.btn-file').length > 0) {
+                $(document)
+                        .on('change', '.btn-file :file', function() {
+                            "use strict";
+                            var input = $(this),
+                                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                            input.trigger('fileselect', [numFiles, label]);
+                        });
+                $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+
+                    var input = $(this).parents('.input-group').find(':text'),
+                            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                    if (input.length) {
+                        input.val(log);
+                    } else {
+                        if (log)
+                            alert(log);
+                    }
+                });
+            }
+            /** END INPUT FILE **/
+
+        });
+    </script>   
+{% endblock %}

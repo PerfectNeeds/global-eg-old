@@ -1,0 +1,66 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block body_html_attribute %}class="user-area"{% endblock %}
+{% block content %}
+<section class="sign-in-up signup_content">
+    <div class="cont">
+        <div class="signup_form form">
+            <img src="{{ asset('bundles/fe/images/Sign-up_03.png')}}">
+            <span class="s1">تسجيل العضوية</span>
+            {%if errorMessage is defined %}<span class="sign-up-errormsg">{{errorMessage}}</span>{%endif%}
+            <div style="clear:both;"></div>
+            <form action="{{path('fe_usr_create')}}" method="POST" >
+                <label>الاسم </label>
+                <input type="text"   name="username" value="">
+                <label>اسم العائلة </label>
+                <input type="text"   name="familyname" value="">
+                <label>البريد الالكتروني</label>
+                <input type="email" value="" name="email" >
+                <label>كلمة السر</label>
+                <input type="password"  name="password"  >
+                <input type="submit" class="submit skip link pinkbtn" value="سجل الآن">
+            </form>
+            <span class="s2-up">
+                <a href="{{path("user_login")}}"> هل لديك حساب بالفعل؟ سجل الدخول</a>
+            </span>
+        </div>
+        <div class="fb" style="">
+            <span style="">أو جرب التسجيل بفيس بوك</span>
+            <a style=""></a>
+        </div>
+    </div>
+</section> 
+
+
+{% endblock %}
+{% block footer %}
+<footer>
+    <p class="last" style="font-size: 13px;">ذا هوليديرز www.theholidayers.com  شركة خدمات سياحية مصرية - حقوق المحتوي والملكية الفكرية والتصميم والصور محفوظة لشركة ذا هوليديرز لسنة ٢٠١٤</p>
+</footer>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ asset('bundles/fe/js/vendor/modernizr-2.6.2.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.dropdown_menu .close').click(function() {
+            $('.dropdown_menu').slideUp();
+            $(".tripsdropdown").removeClass("tripsdrop-is-up");
+        });
+        $('.tripsdropdown').click(function() {
+            if (!$(".tripsdropdown").hasClass("tripsdrop-is-up")) {
+                $('.dropdown_menu').slideDown();
+                $(".tripsdropdown").addClass("tripsdrop-is-up");
+            } else {
+                $('.dropdown_menu').slideUp();
+                $(".tripsdropdown").removeClass("tripsdrop-is-up");
+            }
+        });
+    });
+    </script>
+{{parent()}}
+    <script>
+        jQuery(document).ready(function() {
+            Login.init();
+        });
+        </script>
+{% endblock %}

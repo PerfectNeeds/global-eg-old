@@ -1,0 +1,30 @@
+{% extends 'NewAdminTemplateBundle::base_list.html.twig' %}
+{% block list_title %}Users{% endblock %}
+{% block add_link_title %}Add a new User{% endblock %}
+{% block add_link_href %}{{ path('person_new') }}{% endblock %}
+{% block breadcrumb %}
+<li><a href="{{ path('person') }}"></a>Users</li>
+{% endblock %}
+{% block table %}
+    <table class="records_list table table-striped table-hover table-full-width dataTable">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.email }}</td>
+                <td>{{ entity.phone }}</td>
+                <td>{% if entity.gender == 0  %}Female{%else%}male{%endif%}</td>
+                <td>
+               
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

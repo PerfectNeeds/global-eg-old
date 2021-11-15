@@ -1,0 +1,38 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}{{ page.seo.title }}{% endblock %}
+{% block metaTag %}{{ page.seo.metaTag|raw }}{% endblock %}
+{% block slider %}
+    {% if page.id == 2 %}
+        {% set pageId  = 8 %}
+    {% else %}
+        {% set pageId  = page.id %}
+    {% endif %}
+    {{ render(controller('CMSBundle:FrontEnd/Banner:showOneBanner' , {'placment' : pageId })) }}
+{%  endblock %}
+
+{% block content %}
+    {{ page.post.content.description|raw }}
+
+    {% if page.id == 3 %}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:client' , {'name' : 'Our Clients', 'pageId':page.id})) }}
+    {% elseif page.id == 4 %}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:client' , {'name' : 'We Are Representatives & Distributors for the following Brands', 'pageId':page.id})) }}
+    {% elseif page.id == 5 %}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:portfolio' , {'pageId':page.id})) }}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:clientWithName' , {'name' : 'Industries Served', 'pageId':page.id})) }}
+    {% elseif page.id == 7 %}
+    {{ render(controller('CMSBundle:FrontEnd/HomePage:portfolio' , {'pageId':page.id})) }}
+    {% elseif page.id == 6 %}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:portfolio' , {'pageId':page.id})) }}
+        {{ render(controller('CMSBundle:FrontEnd/HomePage:client' , {'name' : 'Our Clients', 'pageId':page.id})) }}
+<section class="parallax skincolored call_to_action" style="background-image:url({{ asset('bundles/fe/images/parallax.jpg') }})">
+    <div class="overlay">
+        <div class="container"> 
+            <div class="col-md-12">
+                <h4><strong>We will work with you to create the right online media plan for your company, reaching the right audience at the right time. 4Sale Egypt will Plan, Execute, Manage and Achieve</strong>!</h4>
+            </div>
+        </div>
+    </div>
+</section>
+    {% endif %}
+{% endblock %}

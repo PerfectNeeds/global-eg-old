@@ -1,0 +1,115 @@
+{% extends 'AdminTemplateBundle::base.html.twig' %}
+{% set page_title %}Edit {{ entity.name }}{% endset %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/admintemplate/assets/plugins/validator/bootstrapValidator.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body -%}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-bubble4"></i> {{ page_title }}</h6>
+        </div>
+        <div class="panel-body">
+            <form class="form bootstrap-validator-form" id="validation" action="{{ path('client_update', { 'id': entity.id}) }}" role="form" method="POST" {{form_enctype(upload_form)}} {{ form_enctype(edit_form) }}>
+                <input type="hidden" name="_method" value="PUT" />       
+                <div class="row">
+                    <div class="col-xs-6 col-md-9">
+                        <div class="form-group">
+                            <label>Photo</label>
+                            <div class="input-group">
+                                <input type="text" readonly="" class="form-control">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse… {{ form_widget(upload_form.file) }}
+                                    </span>
+                                </span>
+                            </div><!-- /.input-group -->
+                        </div>
+                    </div>
+                    {% if entity.mainImage %}
+                        <div class="col-xs-6 col-md-3 magnific-popup-wrap">
+                            <div class="col-lg-10">
+                                <a title="" data-placement="top" data-toggle="tooltip" href="javascript:del('{{entity.mainImage.id}}')" class="btn btn-danger btn-xs btn-block tooltips" data-original-title="Delete">Delete</a>
+                            </div>
+                            <div class="item">
+                                <a class="thumbnail square no-border zooming"  href="{{ asset("uploads/client/" ~ entity.id ~ "/"  ~ entity.mainImage.id) }}">
+                                    <img src="{{ asset("uploads/client/" ~ entity.id ~ "/"  ~ entity.mainImage.id) }}" />
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {{ form_widget(edit_form) }}
+                <div class="form-group text-right">
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check"></i> Update</button>
+                    <button class="btn btn-danger" type="reset"><i class="fa fa-refresh"></i> Reset</button>
+                </div>
+            </form>
+            {% if entity.mainImage %}
+                <form hidden name="delete_form" id="delete_form" action="{{ path('clientimages_delete', { 'h_id': entity.id  , 'redirect_id' : 1 }) }}" method="POST"  >
+                    <input type="hidden" name="id" id="imageId" />
+                </form>
+            {% endif %}
+            <div >
+                <a href="{{ path('client') }}" class="btn btn-warning">Back to the list</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/validator/bootstrapValidator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#validation').bootstrapValidator();
+            if ($('.magnific-popup-wrap').length > 0) {
+                $('.magnific-popup-wrap').each(function() {
+                    "use strict";
+                    $(this).magnificPopup({
+                        delegate: 'a.zooming',
+                        type: 'image',
+                        removalDelay: 300,
+                        mainClass: 'mfp-fade',
+                        gallery: {
+                            enabled: true
+                        }
+                    });
+                });
+            }
+
+            /** BEGIN INPUT FILE **/
+            if ($('.btn-file').length > 0) {
+                $(document).on('change', '.btn-file :file', function() {
+                    "use strict";
+                    var input = $(this),
+                            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                    input.trigger('fileselect', [numFiles, label]);
+                });
+                $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+
+                    var input = $(this).parents('.input-group').find(':text'),
+                            log = numFiles > 1 ? numFiles + ' files selected' : label;
+                    if (input.length) {
+                        input.val(log);
+                    } else {
+                        if (log)
+                            alert(log);
+                    }
+                });
+            }
+            /** END INPUT FILE **/
+
+        });
+        function del(id) {
+            if (confirm("Are you sure you want to delete?")) {
+                $('#imageId').val(id);
+                $('#delete_form').submit();
+            }
+        }
+
+    </script>   
+{% endblock %}

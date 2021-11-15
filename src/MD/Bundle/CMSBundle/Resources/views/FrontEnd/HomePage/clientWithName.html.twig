@@ -1,0 +1,17 @@
+<section class="">
+    <div class="clients_section wow fadeInUp">
+        <div class="container">
+            <h2 class="section_header elegant centered">{{ name }}<small></small></h2>
+            <div id="owl-demo" class="owl-carousel clients_list">
+                {% for client in clients %}
+                    {% if client.images[0] is defined %}
+                        <div class="item">
+                            <h3>{{ client.name }}</h3>
+                            <img src="{{ asset("uploads/client/" ~ client.id ~ "/"  ~ client.images[0].id) }}" alt="{{ client.name }}" title="{{ client.name }}">
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

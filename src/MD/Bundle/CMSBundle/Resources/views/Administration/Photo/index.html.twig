@@ -1,0 +1,58 @@
+{% extends 'AdminTemplateBundle::base.html.twig' %}
+{% set page_title %}Photo Album {{ photoAlbum.name }} List{% endset %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/admintemplate/assets/plugins/datatable/css/bootstrap.datatable.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body -%}
+    <div class="the-box text-right rounded">
+        <a class="btn btn-warning" href="{{ path('photoalbum') }}"><i class="fa fa-backward"></i>Back</a>
+        <a class="btn btn-success" href="{{ path('photo_new' ,{'pId':photoAlbum.id}) }}">Create a new entry</a>
+    </div>
+    <div class="the-box">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" id="datatable-example">
+                <thead class="the-box dark full">
+                    <tr>
+                        <th>Id</th>
+                        <th>Photo</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>{{ entity.id }}</td>
+                            <td><img src="{{ asset("uploads/photo/" ~ entity.id ~ "/"  ~ entity.image.id) }}" width="75" /></td>
+                            <td>{{ entity.note }}</td>
+                            <td>
+                                <a href="{{ path('photo_edit', { 'id': entity.id }) }}" class="btn btn-info" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                <a  href="#" onclick="javascript:del({{entity.id}})" class="btn btn-danger" data-toggle="tooltip" title="Delete"><i class="fa fa-minus"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form hidden name="delete_form" id="delete_form" action="{{ path('photo_delete' ,{'pId':photoAlbum.id}) }}" method="POST"  >
+        <input type="hidden" name="id" id="entityId" />
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/datatable/js/bootstrap.datatable.js') }}"></script>
+    <script>
+        function del(id) {
+            if (confirm("Are you sure you want to delete?"))
+            {
+                $('#entityId').val(id);
+                $('#delete_form').submit();
+            }
+        }
+    </script>
+{% endblock %}

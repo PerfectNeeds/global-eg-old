@@ -1,0 +1,54 @@
+{% set cr = app.request.attributes.get('_route') %}
+{#<li {% if ('dashboard' == cr) %}class="active"{% endif %}>
+    <a href="{{ path('dashboard') }}">
+        <i class="fa fa-dashboard icon-sidebar"></i>Dashboard
+    </a>
+</li>#}
+{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
+<li {% if ('person_admin' == cr or 'user_edit' == cr or 'user_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('user') }}">
+        <i class="fa fa-user icon-sidebar"></i>Users
+    </a>
+</li>
+{% endif %}
+
+<li {% if ('dynamicpage' == cr  or ('dynamicpage_edit' == cr and entity.cms == true ) or 'dynamicpage_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('dynamicpage') }}">
+        <i class="fa fa-file-o icon-sidebar"></i>Dynamic Pages
+    </a>
+</li>
+<li {% if ( 'portfolio' == cr or 'portfolio_edit' == cr or 'portfolio_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('portfolio') }}">
+        <i class="fa fa-users icon-sidebar"></i>Portfolio
+    </a>
+</li>
+<li {% if ( 'blog' == cr or 'blog_edit' == cr or 'blog_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('blog') }}">
+        <i class="fa fa-users icon-sidebar"></i>News
+    </a>
+</li>
+<li {% if ( 'client' == cr or 'client_edit' == cr or 'client_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('client') }}">
+        <i class="fa fa-users icon-sidebar"></i>Clients
+    </a>
+</li>
+<li {% if ('photoalbum' == cr or 'photoalbum_edit' == cr or 'photoalbum_product_new' == cr) %}class="active"{% endif %}>
+    <a href="{{ path('photoalbum') }}">
+        <i class="fa fa-picture-o icon-sidebar"></i>Photo Albums
+    </a>
+</li>
+<li {% if ( 'dynamicpage_company' == cr or ('dynamicpage_edit' == cr and entity.cms == false )) %}class="active"{% endif %}>
+    <a href="{{ path('dynamicpage_company') }}">
+        <i class="fa fa-users icon-sidebar"></i>Companies
+    </a>
+</li>
+<li {% if ( 'team' == cr or 'team_edit' == cr or 'team_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('team') }}">
+        <i class="fa fa-users icon-sidebar"></i>Teams
+    </a>
+</li>
+<li {% if ( 'banner' == cr or 'banner_edit' == cr or 'banner_new' == cr ) %}class="active"{% endif %}>
+    <a href="{{ path('banner') }}">
+        <i class="fa fa-magic icon-sidebar"></i>Banner
+    </a>
+</li>

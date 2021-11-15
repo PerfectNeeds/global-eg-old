@@ -1,0 +1,20 @@
+{% if Banners|length > 0 %}
+    <section id="slider_wrapper" class="slider_wrapper full_page_photo">
+        <div id="main_flexslider" class="flexslider">
+            <ul class="slides">
+                {% for Banner in Banners %}
+                    <li class="item" style="background-image: url({{ asset('uploads/banner/'~Banner.id~"/"~Banner.image.id) }})">
+                        <div class="container">
+                            <div class="carousel-caption animated bounceInUp">
+                                <h1>
+                                    {{ Banner.title }}
+                                </h1>
+                                {% if Banner.text %}<p class="lead skincolored"> {{Banner.text}} </p>{% endif %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+{% endif %}

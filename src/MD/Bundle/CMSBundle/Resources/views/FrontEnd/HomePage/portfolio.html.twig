@@ -1,0 +1,38 @@
+<section class="portfolio_strict">
+    <div class="container">
+        <h2 class="section_header fancy centered">Our Portfolio<small></small></h2>
+        <div class="row">
+                {% for portfolio in portfolios %}
+            <div class="cat_travel col-xs-12 col-sm-6 col-md-4 col-lg-4 port">
+                <div class="portfolio_item"> 
+                    {% if portfolio.youtubeUrl != '' and portfolio.youtubeUrl != '#' %}
+                    <a href="{{ portfolio.youtubeUrl }}" class="popup-youtube" style="position:relative;">
+                        <span class="play-btn"><img src="{{ asset('bundles/fe/images/play_button.png') }}"/></span>
+                    {% elseif portfolio.id == 42 %}
+                        <a href="{{ path('fe_dynamicpage', {'name':'katamya-heights-luxury-office'}) }}">
+                    {% elseif portfolio.id == 43 %}
+                        <a href="{{ path('fe_dynamicpage', {'name':'waterway-luxury-office'}) }}">
+                    {% endif %}
+                        {% if portfolio.post.mainImage %}
+                        <figure style="background-image:url({{ asset("uploads/portfolios/" ~ portfolio.post.id ~ "/"  ~ portfolio.post.mainImage.id) }})">
+                        {% else %}
+                            <figure style="background-image:url({{ asset('bundles/fe/images/placeholder.jpg') }})">
+                        {% endif %}
+                                <figcaption>
+                                    <div class="portfolio_description">
+                                        <h3>{{ portfolio.title }}</h3>
+                                        <p>{{ portfolio.post.content.brief }}</p>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                       {% if portfolio.youtubeUrl != '' and portfolio.youtubeUrl != '#' or portfolio.id == 42 or portfolio.id == 43 %}</a>{% endif %}
+                </div>
+            </div>
+                {% endfor %}
+            <div class="clearfix"></div>
+            {% if portfolios|length > 3 %}
+            <span class="btn btn-primary more">More</span>
+            {% endif %}
+        </div>
+    </div>
+</section>

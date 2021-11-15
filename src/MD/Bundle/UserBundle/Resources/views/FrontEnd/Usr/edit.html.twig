@@ -1,0 +1,497 @@
+ {% extends "FEBundle::base.html.twig" %}
+{% block stylesheets %}
+{% include "FileUploaderBundle::baseCss.html.twig" %}
+{% endblock %}
+{%block DOCTYPE %}{%endblock%}
+
+{% block content %}
+
+<section>
+    <div class="my_account_orange">
+        <div class="cont">
+            <span class="black_man"></span>
+            <span>حسابي</span>
+        </div>
+    </div>
+    <div class="account_container">
+        <div class="cont">
+            <div id="tabs" class="acc-inner">
+                <div class="account_nav">
+                    <ul>
+                        <li>
+                            <a href="{{path('fe_my_bookings')}}">
+                                <span>رحلاتي</span>
+                            </a>
+                        </li>
+                        <li class="current_booking">
+                            <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}">
+                                <span>تعديل البيانات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{path('fe_pre_change_password')}}">
+                                <span>كلمة السر</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="account_option">
+                    <div id="acc-tab-2">
+                        <h2 class="tab_title">تعديل البيانات</h2>
+                        {%if valid is defined%}<span class="sucess-green-space">لقد تم تعديل بياناتك بنجاح!</span> {%endif%}
+                        <div class="upload_passport">
+                            <br>
+                            <span> قم بإدراج صورة من جواز السفر هنا أو قم بتحميلها و سنقوم نحن بملأ كل البيانات الخاصة بك</span>
+                             {%if user.person.passportImage %}  
+                            {%if user.person.passportImage.extension=="pdf"%}
+                            <form  action="{{path("download")}}" method="GET" >
+                                <input type="hidden"  name="elementId" value="{{user.person.id}}" >
+                                <input type="hidden"  name="docId" value="{{user.person.passportImage.id}}" >
+
+                                <input type="submit" value="download"  >
+                            </form>
+                            {%else%}
+                            <img src="{{ asset("uploads/persons/" ~ user.person.id ~ "/" ~  user.person.passportImage.id) }}" width="140" height="140">
+                           {%endif%} 
+                            <a class="delete" href="javascript:delImage({{user.person.passportImage.id}})" id="delete_link">Delete</a> 
+                           {% endif %}                         
+  <a>{% include "FileUploaderBundle::single-basic-plusjs.html.twig" with {'buttonName': 'تحميل صورة جواز السفر' ,'buttonId': 'SingleFileupload2' , 'filesContainer' : 'singleFiles2' , 'prograss' : 'SingleProgress2' }%}</a>
+
+                        </div>
+                        <div class="edit-option"><span>أو</span>قم بملأ بياناتك الشخصية من هنا </div>
+                        <!--<span class="red-space" hidden="" ></span>-->
+                        <!--<span class="yellow-space">ستستخدم هذه البيانات لتأكيد حجز رحلاتك</span-->
+                        <h3>بيانات شخصية</h3>
+                        <form  action="{{path("fe_usr_update" , {  'id'  :  user.id   }  )}}"  method="POST" >
+                            <label>الكناية</label>
+                            <label style=" margin-right: 32px; ">الإسم</label>
+                            <label style=" margin-right: 125px; "> إسم العائلة</label>
+                            <div class="form-one">
+                                <select name="metonymy" style="width:63px" id="select6">
+                                    <option value="">الكناية</option>
+                                    <option {%if user.person.metonymy == 1 %}selected=""{%endif%} value="{{1}}" >أستاذ</option>
+                                    <option {%if user.person.metonymy == 2 %}selected=""{%endif%}   value="{{2}}">دكتور</option>
+                                </select>
+                                <input  name="username"  value="{{user.person.username}}" style="width:151px;" type="text" class="">
+                                <input  name="familyname"  value="{{user.person.familyname}}" style="width:151px;" type="text" class="">
+                            </div>
+                            <label class="under">رقم الموبايل</label>
+                            <input type="text" name="phone" class="sw" value="{{user.person.phone}}" >
+                            <label class="under">الجنسية</label>
+                            <input type="text" name="citizenship" class="sw" value="{{user.person.citizenship}}" >
+                            <hr class="second-hr">
+                            <h3>بيانات جواز السفر</h3>
+                            <label class="under">جهة إصدار جواز السفر</label>
+                            <select class="sw" name="visaRPlace"  style="width:380px" id="select8">
+                                <option value="">مكان الاصدار</option>
+                                <option>مصر</option>
+                                <option>اليابان</option>
+                                <option>امريكا</option>
+                            </select>
+                            <label class="under"> رقم جواز السفر</label>
+                            <input name="passportNumber" value="{{user.person.passportNumber}}" style="width:373px" type="text"  class="sw" />
+
+                            <label class="under">تاريخ إصدار جواز السفر</label>
+                            <div>
+                                <select name="vsYear" class="sw"  style="width:60px;" id="year5">
+                                    <option value="">YYYY</option>
+                                               {% for i in 1980..2030 %}
+                                    <option {% if vsYear %}{%if vsYear == i %}selected{%endif%}{%endif%} >{{ i }}</option>
+                                                {% endfor %}
+                                </select>
+                                <select name="vsMonth" class="sw" style="width:60px;" id="month5">
+                                    <option value="">MM</option>
+                                                {% for i in 1..12 %}
+                                    <option  {% if vsMonth %}{%if vsMonth == i %}selected{%endif%}{%endif%} >{{ i }}</option>
+                                          {% endfor %}
+                                </select>
+                                <select name="vsDay" class="sw" id="day5" style="width:80px;">
+                                    <option value="">DD</option>
+                                               {% for i in 1..31 %}
+                                    <option  {% if vsDay %}{%if vsDay == i %}selected{%endif%}{%endif%} >{{ i }}</option>
+                                                 {% endfor %}
+                                </select>  
+                            </div>
+                            <label>تاريخ إنتهاء جواز السفر</label>
+                            <div>
+                                <select name="veYear" class="sw" id="year6"  style="width:60px;">
+                                    <option value="">YYYY</option>
+                                               {% for i in 1980..2030 %}
+                                    <option {% if veYear %}{%if veYear == i %}selected{%endif%}{%endif%} >{{ i }}</option>
+                                                {% endfor %}
+                                </select>
+                                <select name="veMonth" class="sw" id="month6"  style="width:60px;">
+                                    <option value="">MM</option>
+                                                {% for i in 1..12 %}
+                                    <option  {% if veMonth %}{%if veMonth == i %}selected{%endif%}{%endif%}  >{{ i }}</option>
+                                          {% endfor %}
+                                </select>
+                                <select name="veDay" class="day" id="day5" style="width:80px;">
+                                    <option value="">DD</option>
+                                               {% for i in 1..31 %}
+                                    <option  {% if veDay %}{%if veDay == i %}selected{%endif%}{%endif%} >{{ i }}</option>
+                                                 {% endfor %}
+                                </select>
+                            </div>
+                            <hr class="second-hr">
+                            <h3>العنوان</h3>
+                            <label class="under">رقم العقار , إسم الشارع , الحي</label>
+                            <input name="address" value="" type="text" class="sw" style="
+                                   width: 373px;
+                                   ">
+                                   <label class="under">المحافظة</label>
+                                   <select class="sw">
+                                       <option>القاهرة</option>
+                                   </select>
+                                   <label class="under">المدينة</label>
+                                   <select class="sw">
+                                       <option>القاهرة</option>
+                                   </select>
+                                   <label class="under">الدولة</label>
+                                   <select class="sw">
+                                       <option>مصر</option>
+                                   </select>
+                                   <span class="btn green3">
+                                       <input type="submit"   class="link greenbtn" title="" value="حفظ البيانات"  >
+                                       <br class="clear" />
+                                   </span>
+                            </form>
+                            <div class="user-img">
+                                  {%if user.person.logoImage %}  
+                                    <img src="{{ asset("uploads/persons/" ~ user.person.id ~ "/" ~  user.person.logoImage.id) }}" width="140" height="140">
+                                    <a class="delete" href="javascript:delImage({{user.person.logoImage.id}})" id="delete_link">Delete</a> 
+                                            {% else %}
+                                    <img class="hotel_img" src="{{ asset('bundles/fe/images/list.png')}}">
+                                     {%endif%}
+                                {% include "FileUploaderBundle::single-basic-plusjs.html.twig" with {'buttonName': 'تحميل الصورة الشخصية' ,'buttonId': 'SingleFileupload' , 'filesContainer' : 'singleFiles' , 'prograss' : 'SingleProgress' }%}
+
+                                </div>
+                                <form hidden name="delete_form" id="delete_form" action="{{ path('personimages_delete', { 'h_id': user.person.id  , 'redirect_id' : 2 }) }}" method="POST"  >
+                                    <input type="hidden" name="id" id="imageId" />
+                                </form>
+                                <!--<p>
+                                    <strong>الرجاء الإنتباه</strong>
+                                    <span>يرجي ملأ البيانات بعناية مطابقة لجواز السفر الخاص بك.
+                                        سوف تستخدم هذه البيانات لتأكيد حجز الرحلات، </span>
+                                </p>-->
+                            </div>
+
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </section>
+        <style>
+                .yellow-space {
+                    width: inherit;
+                    height: 52px;
+                    box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    -webkit-box-sizing: border-box;
+                    display: block;
+                    border-radius: 4px;
+                    -moz-border-radius: 4px;
+                    -webkit-border-radius: 4px;
+                    margin-bottom: 17px;
+                    background-color: #fffde2;
+                    border: 2px dashed #ffe29e;
+                    font-size: 20px;
+                    line-height: 52px;
+                    text-indent: 10px;
+                    color: #464646;
+                }</style>                            {% endblock %}
+  {% block javascripts %}
+{{parent()}}
+            <script type="text/javascript" src="js/vendor/modernizr-2.6.2.min.js"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        {% include "FileUploaderBundle::basejs.html.twig" %}
+            <script>
+                /*jslint unparam: true, regexp: true */
+                /*global window, $ */
+                $(function() {
+                    'use strict';
+                    // Change this to the location of your server-side upload handler:
+                    var url = window.location.hostname === 'blueimp.github.io' ?
+                            '//jquery-file-upload.appspot.com/' : '{{ path('person_create_images' , { 'id': user.person.id , 'type' : logoType }) }}',
+                            uploadButton = $('<button/>')
+                            .addClass('btn btn-primary')
+                            .prop('disabled', true)
+                            .text('Processing...')
+                            .on('click', function() {
+                        var $this = $(this),
+                                data = $this.data();
+                        $this
+                                .hide()
+                                .off('click')
+                                .text('Abort')
+                                .on('click', function() {
+                            $this.remove();
+                            data.abort();
+                        });
+                        data.submit().always(function() {
+                            $this.remove();
+                        });
+                    });
+                    $('.SingleFileupload').fileupload({
+                        url: url,
+                        dataType: 'json',
+                        autoUpload: false,
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                        maxFileSize: 5000000, // 5 MB
+                        // Enable image resizing, except for Android and Opera,
+                        // which actually support image resizing, but fail to
+                        // send Blob objects via XHR requests:
+                        disableImageResize: /Android(?!.*Chrome)|Opera/
+                                .test(window.navigator.userAgent),
+                        previewMaxWidth: 100,
+                        previewMaxHeight: 100,
+                        previewCrop: true
+                    }).on('fileuploadadd', function(e, data) {
+                        data.context = $('<div/>').appendTo('.SingleFiles');
+                        $('#SingleProgress .progress-bar').show();
+                        $.each(data.files, function(index, file) {
+                            var node = $('<p/>')
+                                    .append($('<span/>').text(file.name));
+                            if (!index) {
+                                node
+                                        .append('<br>')
+                                        .append(uploadButton.clone(true).data(data));
+                            }
+                            node.appendTo(data.context);
+                        });
+                    }).on('fileuploadprocessalways', function(e, data) {
+                        var index = data.index,
+                                file = data.files[index],
+                                node = $(data.context.children()[index]);
+                        if (file.preview) {
+                            node
+                                    .prepend('<br>')
+                                    .prepend(file.preview);
+                        }
+                        if (file.error) {
+                            node
+                                    .append('<br>')
+                                    .append($('<span class="text-danger"/>').text(file.error));
+                        }
+                        if (index + 1 === data.files.length) {
+                            data.context.find('button')
+                                    .text('Upload')
+                                    .prop('disabled', !!data.files.error);
+                        }
+                    }).on('fileuploadprogressall', function(e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('#SingleProgress .progress-bar').css(
+                                'width',
+                                progress + '%'
+                                );
+                    }).on('fileuploaddone', function(e, data) {
+                        $.each(data.result.files, function(index, file) {
+                            if (file.url) {
+                                var link = $('<a>')
+                                        .attr('target', '_blank')
+
+                                        .prop('href', file.url)
+                                        .hide();
+                                $('#SingleProgress .progress-bar').css(
+                                        'width',
+                                        0 + '%'
+                                        );
+                                var deleteLink = "<a class='delete' href='javascript:delImage(" + file.id + ")' id='delete_link'>Delete</a>";
+                                var imageUrl = "<li><img src=" + file.url + " width='140' height='140'>";
+                                $(".user-img").empty().append(imageUrl + deleteLink + "</li>");
+                                $(".uploadSubmit").show();
+                                $(data.context.children()[index])
+                                        .wrap(link);
+                            } else if (file.error) {
+                                var error = $('<span class="text-danger"/>').text(file.error);
+                                $(data.context.children()[index])
+                                        .append('<br>')
+                                        .append(error);
+                            }
+                        });
+                    }).on('fileuploadfail', function(e, data) {
+                        $.each(data.files, function(index, file) {
+                            var error = $('<span class="text-danger"/>').text('File upload failed.');
+                            $(data.context.children()[index])
+                                    .append('<br>')
+                                    .append(error);
+                        });
+                    }).prop('disabled', !$.support.fileInput)
+                            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                });
+
+                </script>
+                <script>
+                    /*jslint unparam: true, regexp: true */
+                    /*global window, $ */
+                    $(function() {
+                        'use strict';
+                        // Change this to the location of your server-side upload handler:
+                        var url = window.location.hostname === 'blueimp.github.io' ?
+                                '//jquery-file-upload.appspot.com/' : '{{ path('person_create_images' , { 'id': user.person.id , 'type' : passportType }) }}',
+                                uploadButton = $('<button/>')
+                                .addClass('btn btn-primary')
+                                .prop('disabled', true)
+                                .text('Processing...')
+                                .on('click', function() {
+                            var $this = $(this),
+                                    data = $this.data();
+                            $this
+                                    .hide()
+                                    .off('click')
+                                    .text('Abort')
+                                    .on('click', function() {
+                                $this.remove();
+                                data.abort();
+                            });
+                            data.submit().always(function() {
+                                $this.remove();
+                            });
+                        });
+                        $('.SingleFileupload2').fileupload({
+                            url: url,
+                            dataType: 'json',
+                            autoUpload: false,
+                            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf)$/i,
+                            maxFileSize: 5000000, // 5 MB
+                            // Enable image resizing, except for Android and Opera,
+                            // which actually support image resizing, but fail to
+                            // send Blob objects via XHR requests:
+                            disableImageResize: /Android(?!.*Chrome)|Opera/
+                                    .test(window.navigator.userAgent),
+                            previewMaxWidth: 100,
+                            previewMaxHeight: 100,
+                            previewCrop: true
+                        }).on('fileuploadadd', function(e, data) {
+                            data.context = $('<div/>').appendTo('.SingleFiles2');
+                            $('#SingleProgress2 .progress-bar').show();
+                            $.each(data.files, function(index, file) {
+                                var node = $('<p/>')
+                                        .append($('<span/>').text(file.name));
+                                if (!index) {
+                                    node
+                                            .append('<br>')
+                                            .append(uploadButton.clone(true).data(data));
+                                }
+                                node.appendTo(data.context);
+                            });
+                        }).on('fileuploadprocessalways', function(e, data) {
+                            var index = data.index,
+                                    file = data.files[index],
+                                    node = $(data.context.children()[index]);
+                            if (file.preview) {
+                                node
+                                        .prepend('<br>')
+                                        .prepend(file.preview);
+                            }
+                            if (file.error) {
+                                node
+                                        .append('<br>')
+                                        .append($('<span class="text-danger"/>').text(file.error));
+                            }
+                            if (index + 1 === data.files.length) {
+                                data.context.find('button')
+                                        .text('Upload')
+                                        .prop('disabled', !!data.files.error);
+                            }
+                        }).on('fileuploadprogressall', function(e, data) {
+                            var progress = parseInt(data.loaded / data.total * 100, 10);
+                            $('.SingleProgress .progress-bar').css(
+                                    'width',
+                                    progress + '%'
+                                    );
+                        }).on('fileuploaddone', function(e, data) {
+                            $.each(data.result.files, function(index, file) {
+                                if (file.url) {
+                                    var link = $('<a>')
+                                            .attr('target', '_blank')
+
+                                            .prop('href', file.url)
+                                            .hide();
+                                    $('#SingleProgress2 .progress-bar').css(
+                                            'width',
+                                            0 + '%'
+                                            );
+                                    var deleteLink = "<a class='delete' href='javascript:delImage(" + file.id + ")' id='delete_link'>Delete</a>";
+                                    var imageUrl = "<li><img src=" + file.url + " width='140' height='140'>";
+
+                                    if (file.type !== "pdf") {
+                                        $(".upload_passport").empty().append(imageUrl + deleteLink + "</li>");
+                                    }
+                                    else
+                                        $(".upload_passport").empty().append("thanks file uploaded successfully" + "</li>");
+                                    $(data.context.children()[index])
+                                            .wrap(link);
+                                } else if (file.error) {
+                                    var error = $('<span class="text-danger"/>').text(file.error);
+                                    $(data.context.children()[index])
+                                            .append('<br>')
+                                            .append(error);
+                                }
+                            });
+                        }).on('fileuploadfail', function(e, data) {
+                            $.each(data.files, function(index, file) {
+                                var error = $('<span class="text-danger"/>').text('File upload failed.');
+                                $(data.context.children()[index])
+                                        .append('<br>')
+                                        .append(error);
+                            });
+                        }).prop('disabled', !$.support.fileInput)
+                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                    });
+
+                    </script>
+                    <script type="text/javascript">
+                        function delImage(id) {
+                            if (confirm("Are you sure you want to delete Image ?"))
+                            {
+                                $('#imageId').val(id);
+                                $('#delete_form').submit();
+                            }
+                        }
+                        </script>
+                        <script>
+                            $(function() {
+                                $('.account_dropdown').hover(function() {
+                                    $(this).find('div').slideDown();
+                                })
+                            }, $('.new_h_bottom , .my_account_orange').hover(function() {
+                                $('.account_dropdown div').slideUp();
+                            }));
+                            </script>
+                            <script>
+                                if ($('.account_nav ul li:first-child').hasClass('current_booking')) {
+                                    $('.account_nav ul li:first-child a').addClass('img-one');
+                                }
+                                else if ($('.account_nav ul li:nth-of-type(2)').hasClass('current_booking')) {
+                                    $('.account_nav ul li:nth-of-type(2) a').addClass('img-two');
+                                }
+                                else
+                                {
+                                    $('.account_nav ul li:nth-of-type(3) a').addClass('img-three');
+                                }
+                                </script>
+                                <script>
+                                    var non = $('.upcoming-trip .number-of-nights');
+                                    var ay = $('.upcoming-trip .ayam');
+                                    var hr = $('.trip .back_and_forth hr');
+                                    non.hover(function() {
+                                        non.animate({left: -9}, {queue: false}, 'fast')
+                                                .css({'border': 'transparent', 'margin-top': '4px'});
+                                        ay.animate({left: -35}, 'slow');
+                                        hr.css('margin-left', '36px');
+                                    }, function() {
+                                        ay.animate({left: -30}, {queue: false}, 'fast');
+                                        hr.css('margin-left', '0');
+                                        non.animate({left: -33}, {queue: false}, 'fast')
+                                                .css(
+                                                {'border-width': '1px',
+                                                    'border-style': 'solid',
+                                                    'border-color': 'white',
+                                                    'border-width':'4px',
+                                                            'margin-top': '0'}
+                                        );
+                                    });
+                                    </script>
+                                      {% endblock %}
+

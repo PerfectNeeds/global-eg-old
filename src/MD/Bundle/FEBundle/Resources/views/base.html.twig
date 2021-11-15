@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8"/>
+        <base href="{{ app.request.getScheme() ~'://'~app.request.getHttpHost() }}/" />
+        <link rel="shortcut icon" type='image/x-icon' href="{{ asset('favicon.ico') }}">
+    {% block metaTag %}{% endblock %}
+        <meta name="author" content="perfectneeds.com">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    {% block stylesheet %}
+        <link href="{{ asset('bundles/fe/css/animate.css') }}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{ asset('bundles/fe/css/imagelightbox.css') }}" type="text/css" media="screen">
+        <link href="{{ asset('bundles/fe/css/style.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/fe/css/mainmenu.css') }}" rel="stylesheet" type="text/css">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('bundles/fe/js/woothemes-FlexSlider-06b12f8/flexslider.css') }}" type="text/css" media="screen">
+        <link rel="stylesheet" href="{{ asset('bundles/fe/js/twentytwenty/css/twentytwenty.css') }}" type="text/css" media="screen">
+        <link rel="stylesheet" href="{{ asset('bundles/fe/js/isotope/css/style.css') }}" type="text/css" media="screen">
+        <link href="{{ asset('bundles/fe/css/simpletextrotator.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/fe/css/_style_switcher.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/fe/css/owl.carousel.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/fe/css/owl.theme.css') }}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{ asset('bundles/fe/css/magnific-popup.css') }}" />
+        <style type="text/css">
+            /**
+             * Simple fade transition,
+             */
+            .mfp-fade.mfp-bg {
+                opacity: 0;
+                -webkit-transition: all 0.15s ease-out; 
+                -moz-transition: all 0.15s ease-out; 
+                transition: all 0.15s ease-out;
+            }
+            .mfp-fade.mfp-bg.mfp-ready {
+                opacity: 0.8;
+            }
+            .mfp-fade.mfp-bg.mfp-removing {
+                opacity: 0;
+            }
+
+            .mfp-fade.mfp-wrap .mfp-content {
+                opacity: 0;
+                -webkit-transition: all 0.15s ease-out; 
+                -moz-transition: all 0.15s ease-out; 
+                transition: all 0.15s ease-out;
+            }
+            .mfp-fade.mfp-wrap.mfp-ready .mfp-content {
+                opacity: 1;
+            }
+            .mfp-fade.mfp-wrap.mfp-removing .mfp-content {
+                opacity: 0;
+            }
+        </style>
+        <script type="text/javascript" src="{{ asset('bundles/fe/js/modernizr.custom.48287.js') }}"></script>
+    {% endblock %}
+    </head>
+
+    <body class="sticky_header">
+        <div class="overflow_wrapper">
+            <header>
+                <div class="container">
+                    <div class="logo"><a class="brand" href="{{ path('fe_home') }}"> <img src="{{ asset('bundles/fe/images/logo.png') }}" alt="logo"></a></div>
+                    <!-- MAIN MENU -->
+                    <div id="mainmenu" class="menu_container">
+                        <label class="mobile_collapser">MENU</label>
+                        <!-- Mobile menu title -->
+                        {% set cr = app.request.attributes.get('_route') %}
+                        <ul>
+                            <li {% if ('fe_home' == cr) %}class="active"{% endif %}><a href="{{ path('fe_home') }}">Home</a></li>
+                            <li {% if ('fe_about' == cr) %}class="active"{% endif %}><a href="{{ path('fe_about') }}">About Us</a></li>
+                            <li {% if ('fe_global_engineering_supply' == cr or 'fe_med_trade' == cr or 'fe_technology' == cr or 'fe_4sale_egypt' == cr or 'fe_global_for_real_estate_development' == cr) %}class="active"{% endif %}>
+                                <a href="#"  style="pointer-events: none;cursor: pointer;">Our Services</a>
+                                <div class="dmui_dropdown_block">
+                                    <div>
+                                        <div class="dmui-col">
+                                            <div class="dmui-container">
+                                                <ul class="dmui-submenu">
+                                                    <li><a href="{{ path('fe_global_engineering_supply') }}">Consultancy & Advisory Services</a></li>
+{#                                                    <li><a href="{{ path('fe_med_trade') }}">Engineering Consultancy & Distribution</a></li>#}
+                                                    <li><a href="{{ path('fe_technology') }}">Manufacturing</a></li>
+{#                                                     <li><a href="{{ path('fe_4sale_egypt') }}">Online Services</a></li>#}
+                                                    <li><a href="{{ path('fe_global_for_real_estate_development') }}">Real Estate Development</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li {% if ('fe_our_strategy' == cr) %}class="active"{% endif %}><a href="{{ path('fe_our_strategy') }}">Our Strategy</a></li>
+{#                            <li {% if ('fe_team' == cr) %}class="active"{% endif %}><a href="{{ path('fe_team') }}">Our Team</a></li> #}
+                            <li {% if ('fe_contact' == cr) %}class="active"{% endif %}><a href="{{ path('fe_contact') }}">Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- /MAIN MENU -->
+
+                    <div class="triangle-up-left"></div>
+                    <div class="triangle-up-right"></div>
+                </div>
+            </header>
+        {% block slider%}
+        {%  endblock %}
+            <div class="main">
+                <div class="container triangles-of-section">
+                    <div class="triangle-up-left"></div>
+                    <div class="square-left"></div>
+                    <div class="triangle-up-right"></div>
+                    <div class="square-right"></div>
+                </div>
+            {% block content %}
+            {%  endblock %}
+                <footer>
+                    <section class="footer_teasers_wrapper dark_section">
+                        <div class="container triangles-of-section">
+                            <div class="triangle-up-left"></div>
+                            <div class="square-left"></div>
+                            <div class="triangle-up-right"></div>
+                            <div class="square-right"></div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="footer_teaser pl_about_us_widget col-sm-4 col-md-4">
+                                    <h3>Contact Details</h3>
+                                    <p>Global <small>Engineering And Supply Company</small><br>
+                                        489 ElBanafseg, New Cairo, Cairo, Egypt</p>
+                                    <p><i class="fa fa-envelope"></i> supply@global-eg.com</p>
+                                    <p><i class="fa fa-phone"></i> (+2) 02 2346 7036</p>
+                                    <p><i class="fa fa-fax"></i> Fax : (+2) 02-2346 7034</p>
+                                    <div class="footer_social">
+                                        <div class="social_wrapper">
+                                            <div style="margin-bottom: 5px;">Skype : global.engineering.supply</div> 
+                                            <a href="https://www.linkedin.com/company/global-engineering-&-supply?trk=company_logo" target="_blank"><i class="fa fa-linkedin"></i></a> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer_teaser pl_latest_news_widget col-sm-4 col-md-4">
+                                    <h3><a href="{{ path('fe_blog') }}">Latest News</a></h3>
+                                    <ul class="media-list">
+                                    {{ render(controller('CMSBundle:FrontEnd/HomePage:blog')) }}
+                                    </ul>
+                                </div>
+                                <div class="footer_teaser pl_latest_news_widget col-sm-4 col-md-4">
+                                    <a href="{{ path('fe_photo_album') }}"><h3>Media Center</h3></a>
+                                    <ul class="media-list" style='overflow: hidden;'>
+                                    {{ render(controller('CMSBundle:FrontEnd/HomePage:albumBaseWidget')) }}
+                                    </ul>
+                                    <a href="{{ path('fe_photo_album') }}">View Media Center</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="copyright">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4">Copyright ©2014 all rights reserved </div>
+                                <div class="col-sm-4 col-md-4"></div>
+                                <div class="text-right col-sm-4 col-md-4">Developed by <a href="http://www.perfectneeds.com" target="_blank">PerfectNeeds</a> </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div> 
+        {% block javascript %}
+            <script src="{{ asset('bundles/fe/js/jquery-1.10.2.min.js') }}"></script>
+            <script src="{{ asset('bundles/fe/twitter-bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/fe/js/woothemes-FlexSlider-06b12f8/jquery.flexslider-min.js') }}"></script>
+            <script src="{{ asset('bundles/fe/js/isotope/jquery.isotope.min.js') }}" type="text/javascript"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/jquery.ui.totop.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/easing.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/wow.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/jquery.simple-text-rotator.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/cleanstart_theme.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/collapser.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/twentytwenty/js/jquery.event.move.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/twentytwenty/js/jquery.twentytwenty.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/owl.carousel.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/script.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fe/js/jquery.magnific-popup.js') }}"></script>
+            <script>
+                $(document).ready(function() {
+                    $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+                        disableOn: 700,
+                        type: 'iframe',
+                        mainClass: 'mfp-fade',
+                        removalDelay: 160,
+                        preloader: false,
+                        fixedContentPos: false
+                    });
+                    $("#owl-demo").owlCarousel({
+                        autoPlay: 3000,
+                        items: 4,
+                        itemsDesktop: [1199, 3],
+                        itemsDesktopSmall: [979, 3]
+                    });
+                });
+            </script>
+        {% endblock %}
+    </body>
+</html>

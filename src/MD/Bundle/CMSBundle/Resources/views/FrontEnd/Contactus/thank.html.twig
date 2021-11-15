@@ -1,0 +1,16 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}Contact Us{% endblock %}
+
+{% block banner %}
+{{ render(controller('CMSBundle:FrontEnd/Banner:Banner' , {'placment' : 5 })) }}
+{%endblock %}
+
+{% block content %}
+<div class="page_content">
+    <div class="container">
+        <div class="thank">
+            <h3 style="text-align:center;" class="alert alert-success">Thank you {{ name }}<br><br>Your message has been successfully sent. We will contact you on <br><b>{{ email }}</b><br> very soon!</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

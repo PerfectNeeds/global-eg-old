@@ -1,0 +1,50 @@
+{% extends 'AdminTemplateBundle::base.html.twig' %}
+{% set page_title %}Dashboard{% endset %}
+{% block stylesheets %}
+    {{parent()}}
+    {% include "FileUploaderBundle::baseCss.html.twig" %}
+{% endblock %}
+{% block body -%}
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/js/highcharts.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#container').highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Monthly sales'
+                },
+                subtitle: {
+                    text: 'yadaweya.com'
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb']{#{{ months|raw }}#}
+                },
+                yAxis: {
+                    title: {
+                        text: 'Monet(EGP)'
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: true
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                series: [{
+                        name: 'Sales',
+                        data:  {{ values|raw }}
+                    }]
+            });
+        });
+    </script>   
+{% endblock %}

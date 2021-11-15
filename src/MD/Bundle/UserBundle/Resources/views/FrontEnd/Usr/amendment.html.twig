@@ -1,0 +1,143 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block body_html_attribute %}class="user-area"{% endblock %}
+{% block content %}
+<section>
+    <div class="my_account_orange">
+        <div class="cont">
+            <span class="black_man"></span>
+            <span>حسابي</span>
+        </div>
+    </div>
+    <div class="account_container">
+        <div class="cont">
+            <div id="tabs" class="acc-inner">
+                <div class="account_nav">
+                    <ul>
+                        <li>
+                            <a  href="{{path('fe_my_bookings')}}">
+                                <span>رحلاتي</span>
+                            </a>
+                        </li>
+                        <li class="current_booking">
+                            <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}">
+                                <span>تعديل البيانات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{path('fe_pre_change_password')}}">
+                                <span>كلمة السر</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="account_option">
+                    <div id="acc-tab-1">
+                        <div>{%if successMessage is defined %} {{successMessage}}  {%endif%}</div>
+                        <p class="booking_breadcrumb">
+                            <a>رحلاتي</a>
+                            <span>></span>
+                            <a>حجز رقم {{booking.id}}</a>
+                        </p>
+                        <hr class="first-hr"> 
+                        <h3 class="t1">طلب تعديل حجز  {{booking.id}} - {{booking.packageTrip.package.name}}</h3>
+                        <p class=" cancelation_one">
+                            <span class="numbers_font">
+                                تاريخ الحجز: {{booking.created|date('Y/m/d')}}</span>
+
+                            <span>تاريخ السفر: {{booking.arrivalDate|date('Y/m/d')}} </span>
+
+                            <span>السعر الإجمالي للحجز  <strong class="numbers_font" >{{booking.grandTotal}}</strong> جنيه</span>
+                                                {%if payments|length > 0%}
+                                        {%for payment in payments %}
+                                        {%set amount = payment.amount/100 %}
+                        <p class="grey-gb-2"><span >دفعة {{loop.index}}</span><span class="d">{{payment.created|date('d/m/Y')}}</span><span class="c"><strong>{{amount}}</strong>جنية</span></p>
+                                        {%endfor%}
+                                         {%endif%}
+                                    </p>
+
+                                    <hr class="first-hr">
+
+                                    <div class="cancelation_two">
+                                        <h4>سياسة تعديل الحجوزات وإسترجاع المدفوعات</h4>
+                                        <span>
+                                            يمكنك تعديل الرحلة بعد تاريخ الحجز وحتي قبل تاريخ السفر ب ١٤ يوم <br>
+                                            سوف يتم حساب مصاريف إسترجاع تذاكر الطيران وحجز الفنادق والإنتقالات زائد مصاريف التعديل وخصمها من المبالغ المدفوعة لدينا </span> 
+
+                                    </div>
+                                    <hr class="first-hr">
+                                    <form action="{{path('fe_amendment_booking_email')}}" method="GET"  >
+                                        <input type="hidden" name="bookingId"  value="{{booking.id}}" >
+                                        <div class="cancelation_three">
+                                            <h4>تأكيد التعديل</h4>
+
+                                            <h5>سيتم إرسال طلب إلغائك للحجز لقسم الحجوزات وسوف يتم الإتصال بك في أقرب وقت.</h5>
+                                            <label>ما هو سبب التعديل</label> 
+                                            <select>
+                                                <option>سبب مفاجئ في العمل</option>
+                                            </select> 
+                                            <input type="radio">
+                                            <span>لقدأطلعت علي سياسة تعديل الحجوزات وإسترجاع المدفوعات</span>
+
+                                            <input type="submit" class="redbtn" value="تعديل الحجز">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </section>
+{% endblock %}
+{% block footer %}
+            <footer>
+                <p class="last" style="font-size: 13px;">ذا هوليديرز www.theholidayers.com  شركة خدمات سياحية مصرية - حقوق المحتوي والملكية الفكرية والتصميم والصور محفوظة لشركة ذا هوليديرز لسنة ٢٠١٤</p>
+            </footer>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+            <script type="text/javascript" src="js/vendor/modernizr-2.6.2.min.js"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+            <script>
+                $(function() {
+                    $('.account_dropdown').hover(function() {
+                        $(this).find('div').slideDown();
+                    })
+                }, $('.new_h_bottom , .my_account_orange').hover(function() {
+                    $('.account_dropdown div').slideUp();
+                }));
+                </script>
+                <script>
+                    var non = $('.upcoming-trip .number-of-nights');
+                    var ay = $('.upcoming-trip .ayam');
+                    var hr = $('.trip .back_and_forth hr');
+                    non.hover(function() {
+                        non.animate({left: -9}, {queue: false}, 'fast')
+                                .css({'border': 'transparent', 'margin-top': '4px'});
+                        ay.animate({left: -35}, 'slow');
+                        hr.css('margin-left', '36px');
+                    }, function() {
+                        ay.animate({left: -30}, {queue: false}, 'fast');
+                        hr.css('margin-left', '0');
+                        non.animate({left: -33}, {queue: false}, 'fast')
+                                .css(
+                                {'border-width': '1px',
+                                    'border-style': 'solid',
+                                    'border-color': 'white',
+                                    'border-width':'4px',
+                                            'margin-top': '0'}
+                        );
+                    });
+                    </script>
+                    <script>
+                        if ($('.account_nav ul li:first-child').hasClass('current_booking')) {
+                            $('.account_nav ul li:first-child a').addClass('img-one');
+                        }
+                        else if ($('.account_nav ul li:nth-of-type(2)').hasClass('current_booking')) {
+                            $('.account_nav ul li:nth-of-type(2) a').addClass('img-two');
+                        }
+                        else
+                        {
+                            $('.account_nav ul li:nth-of-type(3) a').addClass('img-three');
+                        }
+                </script>
+{%endblock%}

@@ -1,0 +1,9 @@
+{% for photoAlbum in photoAlbums %}
+    <li class="media first col-md-3"> 
+        {% if photoAlbum.photos[0] %}
+        <a href="{{ path('fe_show_photo_album', {'htmlSlug' : photoAlbum.seo.slug}) }}" class="media-photo" style="background-image:url({{ asset('uploads/photo/'~photoAlbum.photos[0].id~'/'~photoAlbum.photos[0].image.id) }})"></a> 
+        {% else %}
+        <a href="{{ path('fe_show_photo_album', {'htmlSlug' : photoAlbum.seo.slug}) }}" class="media-photo" style="background-image:url({{ asset('bundles/fe/images/placeholder.jpg') }})"></a> 
+        {% endif %}
+    </li>
+{% endfor %}

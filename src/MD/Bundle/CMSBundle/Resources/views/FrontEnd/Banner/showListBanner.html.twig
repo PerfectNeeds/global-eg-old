@@ -1,0 +1,17 @@
+{% if Banners|length > 5 %}
+<button class="btns button_type_7 bg_cs_hover box_s_none f_size_ex_large t_align_c bg_light_color_1 f_left tr_delay_hover r_corners orw_prev"><i class="fa fa-angle-left"></i></button>
+<button class="btns button_type_7 bg_cs_hover box_s_none f_size_ex_large t_align_c bg_light_color_1 f_left m_left_5 tr_delay_hover r_corners orw_next f_right"><i class="fa fa-angle-right"></i></button>
+{% endif %}
+{% if Banners %}
+<div class="our_recent_work_carousel m_bottom_30 m_sm_bottom_20">
+    {% for Banner in Banners %}
+    <figure class="r_corners photoframe animate_ftb long type_2 t_align_c relative publication-home">
+        <a {% if Banner.url != '#' and Banner !='' %}href="{{Banner.url}}"{% endif %} {% if Banner.openType== 1 %}target="_blank"{% endif %} class="d_block relative pp_wrap m_bottom_15">
+            <img src="{{ asset('uploads/banner/'~Banner.id~"/"~Banner.image.id) }}" {% if Banner.text %}alt="{{Banner.text}}"{% endif %} class="tr_all_hover" alt="">
+        </a>
+    </figure>
+    {% endfor %}
+</div>
+    {% else %}
+<div class="alert alert-warning">{% trans %}There is no Records for now{% endtrans %}</div>
+{% endif %}

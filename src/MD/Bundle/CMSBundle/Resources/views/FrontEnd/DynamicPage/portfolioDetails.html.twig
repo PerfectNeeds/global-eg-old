@@ -1,0 +1,73 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}Global | Portfolio{% endblock %}
+
+{% block slider %}
+    {{ render(controller('CMSBundle:FrontEnd/Banner:showOneBanner' , {'placment' : 10 })) }}
+{%  endblock %}
+{% block content %}
+<section class="portfolio_slider_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-7" style="margin-bottom:20px;">
+                <div class="portfolio_slider_wrapper">
+                    <div class="flexslider" id="portfolio_slider">
+                        <ul class="slides">
+                            {% for photo in photoAlbum.photos %}
+                            <li class="item" data-thumb="{{ asset('uploads/photo/'~photo.id~'/'~photo.image.id) }}" style="background-image: url({{ asset('uploads/photo/'~photo.id~'/'~photo.image.id) }})">
+                                <div class="container"> 
+                                    <a href="{{ asset('uploads/photo/'~photo.id~'/'~photo.image.id) }}" class="lightbox_portfolio" title="{{ photo.note }}"></a>
+                                    <div class="carousel-caption">
+                                        <p class="lead">{{ photo.note }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% if photoAlbum.photos|length > 1 %}
+                    <div id="carousel" class="flexslider">
+                        <ul class="slides">
+                            {% for photo in photoAlbum.photos %}
+                            <li> <img src="{{ asset('uploads/photo/'~photo.id~'/'~photo.image.id) }}" alt=""> </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-5">
+                <div class="portfolio_details">
+                    <h2 class="section_header">About the Project</h2>
+                    <p>
+                            {{ photoAlbum.note }}
+                    </p>
+                    <br>
+                    <div>
+                        <p><strong>Date:</strong> {{ photoAlbum.date }}</p>
+                        <p><strong>Client:</strong> {{ photoAlbum.client }}</p>
+                        <p><strong>Company</strong> 
+                                {% if photoAlbum.placement == 3 %}
+                            Global engineering & supply
+                                {% elseif photoAlbum.placement == 4 %}
+                            Med. trade
+                                {% elseif photoAlbum.placement == 5 %}
+                            Technology
+                                {% elseif photoAlbum.placement == 6 %}
+                            4Sale egypt
+                                {% elseif photoAlbum.placement == 7 %}
+                            Global for real estate development
+                                {% endif %}
+                        </p>
+                        <p><strong>Place:</strong> {{ photoAlbum.place }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/fe/js/imagelightbox.min.js') }}"></script>
+{% endblock %}

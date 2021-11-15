@@ -1,0 +1,274 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block content %}
+<section>
+    <div class="my_account_orange">
+        <div class="cont">
+            <span class="black_man"></span>
+            <span>حسابي</span>
+        </div>
+    </div>
+    <div class="account_container">
+        <div class="cont">
+            <div id="tabs" class="acc-inner">
+{%if app.user%}
+                    <div class="account_nav">
+                        <ul>
+                            <li class="current_booking">
+                                <a href="{{path('fe_my_bookings')}}">
+                                    <span>رحلاتي</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}">
+                                    <span>تعديل البيانات</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('fe_pre_change_password')}}">
+                                    <span>كلمة السر</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {%endif%}
+                    {%set days = booking.packageTrip.package.nigthsCount +1 %}
+                    <div class="account_option">
+                        <div id="acc-tab-1">
+                            <h2 class="tab_title">حجز رقم <span class="numbers_font">{{booking.id}}</span></h2>
+                            <hr class="first-hr trip_hr"> 
+                            <div class="trip trip_details upcoming-trip">
+                                <span class="banner"></span>
+                                <img  {%if booking.packageTrip.package.mainImage%}src="{{ asset("uploads/packages/" ~ booking.packageTrip.package.id ~ "/" ~ "th" ~ booking.packageTrip.package.mainImage.id) }}"{%else%}src="{{ asset('bundles/fe/images/lightboximage.png')}}" width="250" height="170" {%endif%}>
+                                <div class="booking_trip_description">
+                                    <h3>{{booking.packageTrip.package.name}}</h3>
+                                    <small>رقم الحجز:&nbsp;&nbsp;<span class="numbers_font">{{booking.id}}</span></small>
+                                    <small>
+                                        <span>
+                                            تاريخ الحجز: <span class="numbers_font">{{booking.created|date('Y/m/d')}}</span></span>
+                                    </small>
+
+                                </div>
+                                <p class="egmaly">
+                                    <span>السعر الإجمالي</span>
+                                    <strong class="numbers_font" >{{booking.getFormatGrandTotal()}}</strong>جنية
+                                </p>
+                                <div class="back_and_forth">
+                                    <span class="go">تاريخ السفر</span>
+                                    <span>
+                                        <strong class="numbers_font">{{booking.arrivalDate|date('d')}}</strong>{{booking.arrivalDate|date('Y/m/d')}}</span>
+                                    <hr>
+                                    <span class="back">تاريخ الرجوع</span>
+                                    <span>
+                                        <strong class="numbers_font">{{booking.arrivalDate|date_modify('+ ' ~days ~ ' days')|date('d')}}</strong>{{booking.arrivalDate|date_modify('+ ' ~days ~ ' days')|date('d/m/y')}}</span>
+                                    <span class="ayam">أيام</span>
+                                    <span class="number-of-nights numbers_font">{{days}}</span>
+                                </div>
+                            </div>
+                            <hr class="first-hr">
+                            <div class="recipt">
+                                <div>
+                                    <span class="hotel_notifi">hotel</span>
+                                    <span class="attatchment"></span>
+                                    <span class="recipt_text">قسيمة حجز فندق هيلتون بودابست</span>
+                                    <a href="#"></a>
+                                    <span class="recipt-new">جديد</span>
+                                </div>
+                                <div>
+                                    <span class="hotel_notifi">flight</span>
+                                    <span class="attatchment"></span>
+                                    <span class="recipt_text">تذكرة الطيران من القاهرة إلي بودابسي، بودابست إلي براج، براج القاهرة</span>
+                                    <a href="#"></a>
+
+                                </div>
+                                <div>
+                                    <span class="hotel_notifi">transfer</span>
+                                    <span class="attatchment"></span>
+                                    <span class="recipt_text">قسيمة حجز الإنتقالات من مطار بوابست إلي الفندق والعكس</span>
+                                    <a href="#"></a>
+                                    <span class="recipt-new">جديد</span>
+                                </div>
+                                <div>
+                                    <span class="hotel_notifi">excursion</span>
+                                    <span class="attatchment"></span>
+                                    <span class="recipt_text">قسيمة حجز رحلة حديقة الحيوانات بمدينة بودابست.</span>
+                                    <a href="#"></a>
+
+                                </div>
+                            </div>
+                            <div class="trip-summary">
+                                <div class="right">
+                                    <h3>ملخص سعر الحجز</h3>
+                                    <ul>
+                                   <span style="display: inline-block;"> {%set adultTotal = (booking.getAdultUsers|length) * (booking.packageTrip.getAdultPrice(expenseTypes)) %}</span>
+                                            <li >حساب البالغين &nbsp;:&nbsp;
+                                                <br><span style="display: inline-block;">{{booking.getAdultUsers|length}}</span> x <span style="display: inline-block;">{{booking.packageTrip.getFormatAdultPrice(expenseTypes)}}</span>&nbsp;<span>ج</span>&nbsp; =&nbsp;<span style="display: inline-block;">{{adultTotal}}</span> ج&nbsp;&nbsp;</li>
+                                   {%set childTotal = (booking.getChildUsers|length) * (booking.packageTrip.getChildPrice(expenseTypes)) %}
+                                            <li>حساب الأطفال&nbsp;&nbsp;:
+                                                <br><span style="display: inline-block;">{{booking.getChildUsers|length}}</span> x <span style="display: inline-block;">{{booking.packageTrip.getChildPrice(expenseTypes)}}</span> ج&nbsp;&nbsp; = &nbsp;<span style="display: inline-block;">{{childTotal}}</span></li>
+                                    {%set details = booking.details|json_decode|raw %} {%set roomTotal = (booking.packageTrip.getSingleRoomPrice()) * (details.roomsNo) %}
+                                            <li >غرفة مستقلة &nbsp;:&nbsp;<span style="display: inline-block;">{{booking.packageTrip.getFormatSingleRoomPrice()}} ج&nbsp;&nbsp;</span> x <span style="display: inline-block;">{{details.roomsNo}}&nbsp;</span> = <span style="display: inline-block;">{{roomTotal}}</span></li>
+                                            <li >رحلات إضافية &nbsp;:&nbsp;<span style="display: inline-block;"> {{booking.excursionsTotal}}</span> ج</li>
+                                        </ul>
+                                        <hr>
+                                        <p>السعر الإجمالي<strong><span style="display: inline-block;">{{booking.getFormatGrandTotal()}}</span></strong>&nbsp;جنية</p>
+                                    </div>
+                                    <div class="left">
+                                        <h3>المدفوعات</h3>
+                                        {%if payments|length > 0%}
+                                        {%for payment in payments %}
+                                        {%set amount = payment.amount/100 %}
+                                        <p class="grey-gb-2"><span >دفعة {{loop.index}}</span><span class="d">{{payment.created|date('d/m/Y')}}</span><span class="c"><strong>{{amount}}</strong>جنية</span></p>
+                                        {%endfor%}
+                                         {%endif%}
+                                                    {%if not  (restOfPayment == 0 )%}
+                                                    <form action="{{path('fe_booking_pay_deposit' , {  'bookingId' : booking.id   })}}" method="POST"  >
+                                                        <div class="payments">
+                                                            <div class="pay-item">
+                                                                <input type="radio" name="paymentMethod">
+                                                                <span>إدفع عن طريق فوري</span>
+                                                            </div>
+                                                            <div class="pay-item">
+                                                                <input type="radio" name="paymentMethod" >
+                                                                <span>إدفع بإستخدام بطاقة الإئتمان</span>
+                                                            </div>
+                                                            <div class="pay-item">
+                                                                <input type="radio" name="paymentMethod" >
+                                                                <span>إدفع عن طريق التحويل البنكي</span>
+                                                            </div>
+                                                            <div class="pay-item">
+                                                                <input type="radio" name="paymentMethod" >
+                                                                <span>إدفع بإستخدام wallety</span>
+                                                            </div>
+                                                        </div>
+                                                        <small>دفعه بالجنية</small>
+                                                        <input type="hidden" value="{{restOfPayment}}"  name="restOfPayment">
+                                                        <span class="t numbers_font"   >{{restOfPayment}}</span>
+                                                        <input class="link skip greenbtn" type="submit" id="" onfocus="" value="إدفع">
+                                                    </form>
+                                                    {%else%}
+                                                    <label>لقد تم دفع المبلغ بلكامل </label>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                            <hr class="wide-hr">
+                                            <div class="extras-on-trip">
+                                                <h3>إضافات علي الرحلة</h3>
+                                                <div class="ext">
+                                                    <p><span class="innerext"><strong style="margin-left:30px;">غرفة مستقلة بالفندق</strong><span style="display: inline-block;">&nbsp;{{booking.packageTrip.getSingleRoomPrice()}}&nbsp;</span> x <span style="display: inline-block;">&nbsp;{{details.roomsNo}}&nbsp;</span> ج&nbsp;= <span style="display: inline-block;">{{roomTotal}}</span> جنية</span></p>
+                                                </div>
+                                {%if booking.excursionPrices |length > 0 %}
+                    {%for excursionPrice in booking.excursionPrices %}
+                                                <div class="ext">
+                                                    <p><span class="innerext" >{{excursionPrice.excursionName}}<span>{{excursionPrice.unitRate}}  جنية</span></span></p>
+                                                </div>
+                                {%endfor%}
+                    {%endif%}
+                                                <hr class="wide-hr">
+                                                <ul class="traveller_data">
+                                                    <div class="not-complete-warning">
+                                                        <strong>بيانات المسافر غير مكتملة، الرجاء مراجعة وتعديل البيانات</strong>
+                                                        <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}" class="edit">تكملة أو تعديل بيانات</a>
+                                                    </div>
+                             {% for bookingUser in booking.getAdultUsers() %}
+                                                    <li>
+                                                        <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}" class="edit">تعديل بيانات</a>
+                                                        <h3>بيانات مسافر بالغ {{loop.index}}
+                                   {%if bookingUser.type == 2 %}<!--<a href="{{path('fe_my_bookings')}}" >view all my bookings </a>--><span class="owner">مالك الحجز</span>{%endif%}
+                                                            </h3>
+                                                            <div class="personal_data">
+                                                                <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+                                                                <span class="data" style="width:380px">البريد الإلكتروني : {{bookingUser.user.email}}</span>
+                                                                <span class="data numbers_font">رقم التليفون : {{bookingUser.user.phone}}</span>
+                                                            </div>
+                                                            <br class="clear" />
+                                                        </li>
+                                  {%endfor%} 
+                                  {% if booking.getChildUsers()|length > 0 %} 
+                                    {% for bookingUser in booking.getChildUsers() %}
+                                                        <li>
+                                                            <a href="" class="edit">تعديل</a>
+                                                            <h3>بيانات الطفل {{loop.index}}</h3>
+                                                            <div class="personal_data">
+                                                                <span class="title">بيانات شخصية</span>
+                                                                <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+                                                                <span class="data">رقم التليفون : <span class="numbers_font">{{bookingUser.user.phone}}</span></span>
+                                                            </div>
+                                                            <br class="clear" />
+                                                        </li>{%endfor%}
+                                     {%endif%}
+                                                    </ul>
+                                                    <hr class="first-hr">
+
+                                                    <p class="cencel_resr">
+                                                        <a href="{{path('fe_pre_cancel_booking' , {  'bookingId' : booking.id  })}}" >إلغاء الحجز نهائيا.</a>&nbsp;&nbsp;&nbsp;
+                                                        الرجاء مراجعة شروط إلغاء الحجز
+                                                    </p>
+                                                    <p class="cencel_resr">
+                                                        <a href="{{path('fe_pre_amendment_booking' , {  'bookingId' : booking.id  })}}" >تعديل الحجز نهائيا.</a>&nbsp;&nbsp;&nbsp;
+                                                        الرجاء مراجعة شروط تعديل الحجز
+                                                    </p>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                        </section>
+{#booking.packageTrip.package.name}}
+        <br />
+{{booking.grandTotal}}
+        <br />
+{%if person %}
+        <li>
+            <a href="" class="edit">تعديل بيانات</a>
+            <div class="personal_data">
+                <span class="data">الإسم : أ/{{person.username}}</span>
+                <span class="data" style="width:380px">البريد الإلكتروني : {{person.email}}</span>
+                <span class="data numbers_font">رقم التليفون : {{person.phone}}</span>
+            </div>
+            <br class="clear" />
+        </li>
+{%else%}
+{% for bookingUser in booking.getAdultUsers() %}
+        <li>
+            <a href="" class="edit">تعديل بيانات</a>
+            <h3>بيانات مسافر بالغ {{loop.index}}
+        {%if bookingUser.type == 2 %}<a href="{{path('fe_my_bookings')}}" >view all my bookings </a><span class="owner">مالك الحجز</span>{%endif%}
+                </h3>
+                <div class="personal_data">
+                    <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+                    <span class="data" style="width:380px">البريد الإلكتروني : {{bookingUser.user.email}}</span>
+                    <span class="data numbers_font">رقم التليفون : {{bookingUser.user.phone}}</span>
+                </div>
+                <br class="clear" />
+            </li>
+{%endfor%} 
+{% if booking.getChildUsers()|length > 0 %} 
+{% for bookingUser in booking.getChildUsers() %}
+            <li>
+                <a href="" class="edit">تعديل</a>
+                <h3>بيانات الطفل {{loop.index}}</h3>
+                <div class="personal_data">
+                    <span class="title">بيانات شخصية</span>
+                    <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+                    <span class="data numbers_font">رقم التليفون : {{bookingUser.user.phone}}</span>
+                </div>
+                <br class="clear" />
+            </li>{%endfor%}
+{%endif%}
+{%endif#}
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                <script>
+                        if ($('.account_nav ul li:first-child').hasClass('current_booking')) {
+                            $('.account_nav ul li:first-child a').addClass('img-one');
+                        }
+                        else if ($('.account_nav ul li:nth-of-type(2)').hasClass('current_booking')) {
+                            $('.account_nav ul li:nth-of-type(2) a').addClass('img-two');
+                        }
+                        else
+                        {
+                            $('.account_nav ul li:nth-of-type(3) a').addClass('img-three');
+                        }
+                </script>
+                                {% endblock %}

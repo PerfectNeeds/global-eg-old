@@ -1,0 +1,23 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block content %}
+<section class="sign-in-up signup_content">
+    <div class="cont">
+        <div class="thanks_page">
+            <div>
+                <h1>شكرا جزيلا يا معلم</h1>
+                <p>من فضلك لو سمحت ادخل على اللينك اللى تحت
+وربنا هتلاقى حاجات حلوة هتعجبك</p>
+                <a href="{{path("user_login")}}" class="greenbtn">تسجيل الدخول</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} {% block footer %}
+<footer>
+    <p class="last" style="font-size: 13px;">ذا هوليديرز www.theholidayers.com  شركة خدمات سياحية مصرية - حقوق المحتوي والملكية الفكرية والتصميم والصور محفوظة لشركة ذا هوليديرز لسنة ٢٠١٤</p>
+</footer>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">        </script>
+    <script type="text/javascript" src="{{ asset('bundles/fe/js/vendor/modernizr-2.6.2.min.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}Global | Albums{% endblock %}
+
+{% block slider %}
+    {{ render(controller('CMSBundle:FrontEnd/Banner:showOneBanner' , {'placment' : 10 })) }}
+{%  endblock %}
+{% block content %}
+    <div class="container">
+        <section>
+            <ul class="portfolio_filters">
+                <li><a href="#" data-filter="*">show all</a></li>
+                <li><a href="#" data-filter=".global">Global Engineering & Supply</a></li>
+{#                <li><a href="#" data-filter=".med">Mediterranean For Trade And Services</a></li> #}
+                <li><a href="#" data-filter=".technology">Technology</a></li>
+{#               <li><a href="#" data-filter=".saleegypt">4sale Egypt</a></li>#}
+                <li><a href="#" data-filter=".g-realstate">Global for Real Estate Development</a></li>
+            </ul>
+        </section>
+        <section class="portfolio_masonry">
+            <div class="row isotope_portfolio_container">
+
+                {% for photoAlbum in photoAlbums %}
+                    {% if photoAlbum.placement == 3 %}
+                        {% set class = 'global' %}
+                    {% elseif photoAlbum.placement == 4 %}
+                        {% set class = 'med' %}
+                    {% elseif photoAlbum.placement == 5 %}
+                        {% set class = 'technology' %}
+                    {% elseif photoAlbum.placement == 6 %}
+                        {% set class = 'saleegypt' %}
+                    {% elseif photoAlbum.placement == 7 %}
+                        {% set class = 'g-realstate' %}
+                    {% endif %}
+                    
+                    <div class="{{ class }} col-sm-4 col-md-4">
+                        <div class="portfolio_item"> 
+                            <a href="{{ path('fe_show_photo_album', {'htmlSlug' : photoAlbum.seo.slug}) }}"> 
+                                {% if photoAlbum.photos[0] != null %}
+                                    <img src="{{ asset('uploads/photo/'~photoAlbum.photos[0].id~'/'~photoAlbum.photos[0].image.id) }}" alt="{{ photoAlbum.name }}">
+                                {% endif %}
+                                <div class="overlay">
+                                    <div class="desc">
+                                        <h3>{{ photoAlbum.name }}</h3>
+                                        <span class="cross"></span>
+                                        <p>{{ photoAlbum.note }}</p>
+                                    </div>
+                                </div>
+                            </a> 
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </section>
+    </div>
+{% endblock %}

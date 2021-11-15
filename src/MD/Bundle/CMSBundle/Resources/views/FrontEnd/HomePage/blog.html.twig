@@ -1,0 +1,6 @@
+{% for blog in blogs %}
+    <li class="media"> <a href="{{ blog.url }}" target="_blank" class="media-photo" {% if blog.images[0] != null %} style="background-image:url({{ asset('uploads/blog/' ~ blog.id ~ '/' ~ blog.images[0].id) }})"{% endif %}></a> <a href="{{ blog.url }}" target="_blank" class="media-date">{{ blog.created|date('d') }}<span>{{ blog.created|date('M') }}</span></a>
+        <h5 class="media-heading"><a href="{{ blog.url }}" target="_blank">{{ blog.title }}</a></h5>
+        <p>{{ blog.post.content.brief }}</p>
+    </li>
+{% endfor %}

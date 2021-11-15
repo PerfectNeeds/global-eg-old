@@ -1,0 +1,31 @@
+user_admin:
+  resource: "@UserBundle/Controller/Administration/"
+  type:    annotation
+  prefix: /admin/user
+
+dashboard:
+    pattern:   admin/
+    defaults:  { _controller: CMSBundle:Administration/Dashboard:Dashboard }
+    
+cms_admin:
+  resource: "@CMSBundle/Controller/Administration/"
+  type:    annotation
+  prefix: /admin
+  
+cms:
+  resource: "@CMSBundle/Controller/FrontEnd/"
+  type:    annotation
+  prefix: /
+
+login:
+    pattern:   /login
+    defaults:  { _controller: UserBundle:FrontEnd/Account:login }
+
+login_check:
+    pattern:   /login_check
+
+logout:
+    pattern:   /{_locale}/logout
+    defaults:  {_locale: en }
+    requirements:
+            _locale: |en|ar

@@ -1,0 +1,79 @@
+{% extends 'FEBundle::base.html.twig' %}
+
+{% block title %}{% if blogger %}{{ blogger.seo.title }}{% endif %}{% endblock %}
+{% block metaTag %}{% if blogger %}{{ blogger.seo.metaTag }}{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="page_content_offset">
+    <div class="container">
+        <div class="clearfix">
+            <section class="col-lg-9 col-md-9 col-sm-9" style="padding-left: 0px;">
+                <h2 class="tt_uppercase color_dark m_bottom_25">{{ blogger.title }}</h2>
+                {% for entity in entities %}
+                <article class="m_bottom_20 clearfix">
+                    <a href="{{ path('fe_blogger_details',{'slug':entity.seo.slug}) }}" class="photoframe d_block d_xs_inline_b f_xs_none wrapper shadow f_left m_right_20 m_bottom_10 r_corners">
+                        {% if entity.post.getMainImage %}
+                        <img src="{{ asset("uploads/bloggers/" ~ entity.post.id ~ "/"  ~ entity.post.getMainImage.id) }}" class="tr_all_long_hover" alt="{{ entity.title }}" style="width: 350px;">
+                        {% else %}
+                        <img src="{{ asset('bundles/fe/images/placeholder.png') }}" class="tr_all_long_hover" alt="{{ entity.title }}" title="{{ entity.title }}" style="width: 350px;"/>
+                        {% endif %}
+                    </a>
+                    <div class="mini_post_content">
+                        <h4 class="m_bottom_5"><a href="{{ path('fe_blogger_details',{'slug':entity.seo.slug}) }}" class="color_dark fw_medium prices">{{ entity.title }}</a></h4>
+                        <p class="f_size_medium m_bottom_10">{{ entity.created|date('d M y') }}, {{ entity.bloggerComments|length }} comments.</p>
+                        <hr class="m_bottom_15">
+                        <p class="m_bottom_10" style="color:#000">{{ entity.post.content.brief|raw|slice(0, 200) }}</p>
+                        <a href="{{ path('fe_blogger_details',{'slug':entity.seo.slug}) }}" class="tt_uppercase f_size_large">{% trans %}Read More{% endtrans %}</a>
+                    </div>
+                </article>
+                {% endfor %}
+                <div class="col-md-12 t_align_r t_xs_align_l">
+                    {{ include('CMSBundle:FrontEnd/HomePage:Pagination.html.twig', {'paginator':paginator}) }}
+                </div>
+            </section>
+
+            <aside class="col-lg-3 col-md-3 col-sm-12 m_bottom_30">
+                <figure class="widget shadow r_corners wrapper m_bottom_30">
+                    <figcaption>
+                        <h3 class="color_light">{% trans %}Archive{% endtrans %}</h3>
+                    </figcaption>
+                    <div class="widget_content">
+                        <!--Categories list-->
+                        <ul class="categories_list">
+                                {% for year, archive  in archives %}
+                            <li class="active">
+                                <a href="#" class="f_size_large scheme_color d_block relative">
+                                    <b>{{ year }}</b>
+                                    <span class="bg_light_color_1 r_corners f_right color_dark talign_c"></span>
+                                </a>
+                                <!--second level-->
+                                <ul>
+                                            {% for month, boggers  in archive %}
+                                    <li class="active">
+                                        <a href="#" class="d_block f_size_large color_dark relative">
+                                                        {{ month }} ({{ boggers|length }})<span class="bg_light_color_1 r_corners f_right color_dark talign_c"></span>
+                                        </a>
+                                        <!--third level-->
+                                        <ul>
+                                                        {% for bogger in boggers %}
+                                            <li><a href="{{ path('fe_blogger_details',{'slug':bogger.seo.slug}) }}" class="color_dark d_block">{{ bogger.title }}</a></li>
+                                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                            {% endfor %}
+                                </ul>
+                            </li>
+                                {% endfor %}
+                        </ul>
+                    </div>
+                </figure>
+                <a href="#" class="widget animate_ftr d_block r_corners m_bottom_30 spacing adv">
+                    <img src="{{ asset('bundles/fe/images/banner_img_6.jpg') }}" alt="">
+                </a>
+            </aside>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}Global Engineering{% endblock %}
+
+{% block content %}
+<div class="full_page_photo" style="background-image: url({{ asset('bundles/fe/images/services.jpg') }});">
+    <div class="hgroup">
+        <div class="hgroup_title animated bounceInUp">
+            <div class="container">
+                <h1>Global Engineering & supply Company</h1>
+            </div>
+        </div>
+        <div class="hgroup_subtitle animated bounceInUp skincolored">
+            <div class="container">
+                <p class="lead skincolored"><strong>Global Engineering</strong> shoots for engaging people in the market and delivering high standard values.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="container triangles-of-section">
+        <div class="triangle-up-left"></div>
+        <div class="square-left"></div>
+        <div class="triangle-up-right"></div>
+        <div class="square-right"></div>
+    </div>
+
+    <!-- HORIZONTAL TEASER SECTION WITH 20 20 PLUGIN -->
+
+    <section class="horizontal_teaser">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-8 horizontal_teaser_left">
+                    <h3>What We Do</h3>
+                    <p>Our company acts mainly as a consultant for companies who are interested in penetrating the Egyptian market.</p>
+                    <p>We realize that in today's rapidly changing business environment, requirements are constantly evolving. By complying with the change in market conditions, new announcement s by the competition, we seek to attain our progress.</p>
+                    <p>Consequently, we guide our clients to the most profitable business in the Egyptian market by acting as sales, marketing and administrative arm for their businesses that is expanding in Egypt.</p>
+                </div>
+                <div class="col-sm-12 col-md-4 horizontal_teaser_right">
+                    <img src="{{ asset('bundles/fe/images/global-logo.png') }}" alt="" style="margin-top: 100px;"/> 
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- /HORIZONTAL TEASER SECTION WITH 20 20 PLUGIN -->
+
+    <!-- SERVICES SECTION -->
+
+    <section class="services_teasers dark_section">
+        <div class="container triangles-of-section">
+            <div class="triangle-up-left"></div>
+            <div class="square-left"></div>
+            <div class="triangle-up-right"></div>
+            <div class="square-right"></div>
+        </div>
+        <div class="container">
+            <h2 class="section_header fancy centered">We Provide Services<small>That stand out for their Quality</small></h2>
+            <div class="row">
+                
+                <!-- Loop -->
+                <div class="col-sm-4 col-md-4">
+                    <div class="service_teaser vertical">
+                        <div class="service_photo">
+                            <figure style="background-image:url({{ asset('bundles/fe/images/serv_4.jpg') }})"></figure>
+                        </div>
+                        <div class="service_details">
+                            <h2>Sales and Marketing</h2>
+                            <p>Quisque at lectus leo, nec placerat mi. Curabitur egestas eleifend interdum. Suspendisse potenti. Suspendisse nec risus fermentum. </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Loop -->
+                
+            </div>
+        </div>
+    </section>
+
+    <div class="container triangles-of-section">
+        <div class="triangle-up-left"></div>
+        <div class="square-left"></div>
+        <div class="triangle-up-right"></div>
+        <div class="square-right"></div>
+    </div>
+    <section class="">
+        <div class="clients_section wow fadeInUp">
+            <div class="container">
+                <h2 class="section_header elegant centered">Our clients <small></small></h2>
+                <div id="owl-demo" class="owl-carousel clients_list">
+                    <!-- Loop -->
+                    <div class="item"><img src="{{ asset('bundles/fe/images/clients/global.png') }}" alt="global" title="Global"></div> 
+                    <!-- End Loop -->
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

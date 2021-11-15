@@ -1,0 +1,48 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}Our Team{% endblock %}
+
+{% block slider %}
+    {{ render(controller('CMSBundle:FrontEnd/Banner:showOneBanner' , {'placment' : 9 })) }}
+{%  endblock %}
+
+{% block content %}
+<section class="team_members">
+    <div class="container triangles-of-section">
+        <div class="triangle-up-left"></div>
+        <div class="square-left"></div>
+        <div class="triangle-up-right"></div>
+        <div class="square-right"></div>
+    </div>
+    <div class="container">
+        <h2 class="section_header fancy centered">Meet our Team... <small>they are always up to something good!</small></h2>
+        <div class="row">
+            <div class="clearfix"></div>
+            <div class="col-sm-12 col-md-12">
+                    {% for team in teams %}
+                <div class="col-sm-3 col-md-3 team-mem">
+                    <div class="team_member">
+                        {% if team.mainImage %}
+                        <figure style="background-image: url({{ asset('uploads/teams/'~team.id~'/'~team.mainImage.id) }})"><img src="{{ asset('uploads/teams/'~team.id~'/'~team.mainImage.id) }}" alt="{{ team.name }}"></figure>
+                        {% else %}
+                        <figure style="background-image: url({{ asset('bundles/fe/images/placeholder.jpg') }})"><img src="{{ asset('bundles/fe/images/placeholder.jpg') }}" alt="{{ team.name }}"></figure>
+                        {% endif %}
+                        <h5>{{ team.name }}</h5>
+                        <small>{{ team.position }}</small>
+                        <hr>
+                        <p class="short_bio">{{ team.note }}</p>
+                        <div class="team_social"> 
+                                    {% if team.email != "" %}
+                            <a href="mailto:{{ team.email }}"><i class="fa fa-send"></i></a> 
+                                        {% endif %}
+                                        {% if team.linkedin != "" %}
+                            <a href="{{ team.linkedin }}"><i class="fa fa-linkedin"></i></a> 
+                                        {% endif %} 
+                        </div>
+                    </div>
+                </div>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

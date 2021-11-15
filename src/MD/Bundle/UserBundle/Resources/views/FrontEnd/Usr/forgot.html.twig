@@ -1,0 +1,33 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block content %}
+<section id="si" class="sign-in-up signin_content">
+    <div class="cont">
+        <div class="signin_form form">
+          {%if failMessage %}  <div class="error">{{failMessage}}</div>{%endif%}
+            {%if successMessage %}<div class="success">{{successMessage}}</div>{%endif%}
+            <img src="{{ asset('bundles/fe/images/Sign-in_03.png')}}">
+            <span class="s1"> نسيت كلمة السر الخاصة بك</span>
+            <br class="clear"/>
+            <form action="{{path("fe_pre_forgot_password")}}" method="post">
+                <label> البريد الالكترونى أو اسم الدخول</label>
+                <input type="text" placeholder="البريد الإلكتروني" name="email" id="email_address"/>
+                <input class="link skip greenbtn submit" type="submit"  id="forgot_submit" onfocus="this.blur();" value="إرسل كلمة السر">
+                            <br class="clear"/>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block head_code %}
+<link rel="stylesheet" href="{{asset('bundles/fe/css/internal.css')}}">
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">        </script>
+<script src="{{asset('bundles/fe/js/livevalidation.js')}}"></script>
+<script type="text/javascript">
+                      var email_address = new LiveValidation('email_address', {onlyOnSubmit: true});
+                      email_address.add(Validate.Presence);
+                      email_address.add(Validate.Email);
+</script>
+{% endblock %}

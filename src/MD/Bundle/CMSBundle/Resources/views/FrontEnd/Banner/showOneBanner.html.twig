@@ -1,0 +1,16 @@
+{% if banner != null %}
+    <div class="full_page_photo" style="background-image: url({{ asset('uploads/banner/'~banner.id~"/"~banner.image.id) }});">
+        <div class="hgroup">
+            <div class="hgroup_title animated bounceInUp">
+                <div class="container">
+                    <h1 class="">{{ banner.title }}</h1>
+                </div>
+            </div>
+            <div class="hgroup_subtitle animated bounceInUp skincolored">
+                <div class="container">
+                    {% if banner.text %}<p class="lead skincolored"> {{banner.text}} </p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

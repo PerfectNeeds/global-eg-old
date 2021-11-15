@@ -1,0 +1,131 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block content %}
+<section>
+    <div class="my_account_orange">
+        <div class="cont">
+            <span class="black_man"></span>
+            <span>حسابي</span>
+        </div>
+    </div>
+    <div class="account_container">
+        <div class="cont">
+            <div id="tabs" class="acc-inner">
+                                    {%if app.user%}
+                    <div class="account_nav">
+                        <ul>
+                            <li class="current_booking">
+                                <a href="{{path('fe_my_bookings')}}">
+                                    <span>رحلاتي</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path("fe_usr_edit" , { 'id' : app.user.id })}}">
+                                    <span>تعديل البيانات</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('fe_pre_change_password')}}">
+                                    <span>كلمة السر</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {%endif%}
+                    <div class="account_option">
+                        <div id="acc-tab-1">
+                            <h2 class="tab_title">رحلاتي</h2>
+                            <hr class="first-hr"> 
+                            {%if allBookingUsers|length > 0%}
+                        {%for allBookingUser in allBookingUsers %}
+                            <div class="trip upcoming-trip">
+                                <span class="banner"></span>
+                                <img  {%if allBookingUser.booking.packageTrip.package.mainImage%}src="{{ asset("uploads/packages/" ~allBookingUser.booking.packageTrip.package.id ~ "/" ~ "th" ~ allBookingUser.booking.packageTrip.package.mainImage.id) }}"{%else%}src="{{ asset('bundles/fe/images/lightboximage.png')}}" width="250" height="170" {%endif%}>
+                                <div class="booking_trip_description">
+                                    <h3>{{allBookingUser.booking.packageTrip.package.name}}</h3>
+                                    <small>رقم الحجز:&nbsp;&nbsp;<span class="numbers_font">{{allBookingUser.booking.id}}</span></small>
+                                    <small>
+                                        <span class="numbers_font">{{allBookingUser.booking.arrivalDate|date('Y/m/d')}}</span>
+                                    </small>
+                                    <a class="link orangebtn" href="{{ path('fe_my_booking_details', { 'bookingId': allBookingUser.booking.id}) }}" title="أعرض">عرض</a>
+                                </div>
+                                <p class="egmaly">
+                                    <span>السعر الإجمالي</span>
+                                    <strong class="numbers_font" >{{allBookingUser.booking.getFormatGrandTotal()}}</strong>جنية
+                                </p>
+                                <div class="back_and_forth">
+                                    <span class="go">تاريخ السفر</span>
+                                    <span>
+                                        <strong class="numbers_font">{{allBookingUser.booking.arrivalDate|date('d')}}</strong>{{allBookingUser.booking.arrivalDate|date('Y/m/d')}}</span>
+                                    <hr>
+                                    <span class="back">تاريخ الرجوع</span>
+                                    <span>
+                                        <strong class="numbers_font">{{allBookingUser.booking.arrivalDate|date_modify('+7 days')|date('d')}}</strong>{{allBookingUser.booking.arrivalDate|date_modify('+7 days')|date('Y/m/d')}}</span>
+                                    <span class="ayam">أيام</span>
+                                    <span class="number-of-nights numbers_font">{{allBookingUser.booking.packageTrip.package.nigthsCount}}</span>
+                                </div>
+                            </div>
+                       {%endfor%}
+                            {%else%}
+                            <span class="sign-up-errormsg" style="margin-right:0;">لا يوجد رحلات</span>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</section>
+{#for allBookingUser in allBookingUsers %}
+{{allBookingUser.booking.packageTrip.package.name}}
+<br />
+{{allBookingUser.booking.grandTotal}}
+<br />
+{% for bookingUser in allBookingUser.booking.getAdultUsers() %}
+<li>
+    <a href="" class="edit">تعديل بيانات</a>
+    <h3>بيانات مسافر بالغ {{loop.index}}
+        {%if bookingUser.type == 2 %}<span class="owner">مالك الحجز</span>
+            <a href="{{path('fe_booking_pay_deposit' , {  'bookingId' : allBookingUser.booking.id   })}}">الدفع اون لين </a>
+       {%endif%}
+        </h3>
+        <div class="personal_data">
+            <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+            <span class="data" style="width:380px">البريد الإلكتروني : {{bookingUser.user.email}}</span>
+            <span class="data numbers_font">رقم التليفون : {{bookingUser.user.phone}}</span>
+        </div>
+        <br class="clear" />
+    </li>
+{%endfor%} 
+{% if allBookingUser.booking.getChildUsers()|length > 0 %} 
+{% for bookingUser in allBookingUser.booking.getChildUsers() %}
+    <li>
+        <a href="" class="edit">تعديل</a>
+        <h3>بيانات الطفل {{loop.index}}</h3>
+        <div class="personal_data">
+            <span class="title">بيانات شخصية</span>
+            <span class="data">الإسم : أ/{{bookingUser.user.username}}</span>
+            <span class="data numbers_font">رقم التليفون : {{bookingUser.user.phone}}</span>
+        </div>
+        <br class="clear" />
+    </li>{%endfor%}
+{%endif%}
+    <br>
+    <label>------------------------------------------==========---------------------------</label>
+    <br>
+{%endfor#}
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    if ($('.account_nav ul li:first-child').hasClass('current_booking')) {
+        $('.account_nav ul li:first-child a').addClass('img-one');
+    }
+    else if ($('.account_nav ul li:nth-of-type(2)').hasClass('current_booking')) {
+        $('.account_nav ul li:nth-of-type(2) a').addClass('img-two');
+    }
+    else
+    {
+        $('.account_nav ul li:nth-of-type(3) a').addClass('img-three');
+    }
+    </script>
+{% endblock %}

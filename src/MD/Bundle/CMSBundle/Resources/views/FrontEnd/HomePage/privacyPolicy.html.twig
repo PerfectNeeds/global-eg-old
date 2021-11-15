@@ -1,0 +1,33 @@
+{% extends 'FEBundle::base.html.twig' %}
+
+{% block title %}{{ privacy.seo.title }}{% endblock %}
+{% block metaTag %}{{ privacy.seo.metaTag }}{% endblock %}
+
+{% block content %}
+
+<div id="page-content" role="main">
+    <div class="container">
+        <div id="content">
+
+            <div class="container-out container-light">
+
+                <div class="title title-section">
+                    <h2>{{ privacy.title }}</h2>
+                    <span class="sticker">
+                        <i class="icon fa fa-gear"></i>
+                    </span>
+                </div><!-- .title.title-section -->
+            </div><!-- .container-out -->
+            <div class="row row-inline" id="cms">
+                <div class="col-sm-12">
+                    <div class="text">
+                        <p> {{ privacy.post.content.description|raw }} </p>
+                    </div>
+                </div><!-- .col-sm-6 -->
+            </div><!-- .row -->
+            <hr class="devider-margin-big" />
+        </div><!-- #content -->
+    </div><!-- .container -->
+</div><!-- #page-content -->
+
+{% endblock %}

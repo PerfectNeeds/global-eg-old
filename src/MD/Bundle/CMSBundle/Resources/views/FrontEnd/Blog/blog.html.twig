@@ -1,0 +1,48 @@
+{% extends 'FEBundle::base.html.twig' %}
+{% block title %}News{% endblock %}
+
+
+{% block slider %}
+    {{ render(controller('CMSBundle:FrontEnd/Banner:showOneBanner' , {'placment' : 11 })) }}
+{% endblock %}
+{% block content %}
+
+    <section class="with_right_sidebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    {% for blog in blogs %}
+                        <article class="post col-sm-12 col-md-6">
+                            <div class="post_header">
+                                <h3 class="post_title"><a href="{{ blog.url }}" target="_blank">{{ blog.title }}</a></h3>
+                            </div>
+                            <div class="post_content">
+                                <figure class="col-md-5">
+                                    <a href="{{ blog.url }}" target="_blank">
+                                        {% if blog.images[0] != null %} 
+                                            <img alt="name" src="{{ asset('uploads/blog/' ~ blog.id ~ '/' ~ blog.images[0].id) }}">
+                                        {% endif %}
+                                    </a>
+                                </figure>
+                                <p class="col-md-7">{{ blog.post.content.brief }}.... <a href="{{ blog.url }}" target="_blank">Read More</a></p>
+                            </div>
+                        </article>
+                    {% endfor %}
+                    {#<div class="clearfix"></div>
+                    <div class="pagination_wrapper" style="text-align:center;">
+                        <ul class="pagination pagination-centered">
+                            <li class="disabled"><a href="#">«</a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">»</a></li>
+                        </ul>
+                    </div>#}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock%}

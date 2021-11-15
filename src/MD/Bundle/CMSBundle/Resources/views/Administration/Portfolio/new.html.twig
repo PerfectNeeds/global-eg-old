@@ -1,0 +1,55 @@
+
+{% extends 'AdminTemplateBundle::base.html.twig' %}
+{% set page_title %}Portfolio creation{% endset %}
+
+{% block body -%}
+    {{ parent() }}
+    {# tinymce_init() #}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-bubble4"></i> {{ page_title }}</h6>
+        </div>
+        <div class="panel-body">
+            {{ tinymce_init({theme: "simple"}) }}
+
+            <form class="form bootstrap-validator-form" id="validation" action="{{ path('portfolio_create') }}" role="form" method="POST">
+                {{ form_widget(form) }}
+                {{ form_widget(formSeo) }}
+                <div class="form-group">
+                    <label for="portfoliotype_brief" class="required">Page Brief</label>
+                    <textarea id="portfoliotype_brief" name="brief" required="required" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="portfoliotype_content" class="required">Page Content</label>
+                    <textarea id="portfoliotype_content" name="description" class="tinymce " data-theme="bbcode"></textarea>
+                </div>
+                <div class="form-group text-right">
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check"></i> Create</button>
+                    <button class="btn btn-danger" type="reset"><i class="fa fa-refresh"></i> Reset</button>
+                </div>
+            </form>
+            <div >
+                <a href="{{ path('portfolio') }}" class="btn btn-warning">Back to the list</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts  %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/slug/jquery.slug.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/admintemplate/assets/plugins/validator/bootstrapValidator.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#md_bundle_cmsbundle_portfolio_title").slug({
+                slug: 'slug', // class of input / span that contains the generated slug 
+                hide: false        // hide the text input, true by default 
+            });
+
+            $('#validation').bootstrapValidator().disableSubmitButtons();
+
+
+        });
+    </script>
+{% endblock %}

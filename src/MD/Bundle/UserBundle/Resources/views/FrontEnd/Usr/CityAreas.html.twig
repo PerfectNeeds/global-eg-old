@@ -1,0 +1,13 @@
+{% set la = "En" %}
+
+{% if app.request.cookies.has('ChangeLanguage') %}
+{% set la = app.request.cookies.get('ChangeLanguage') %}
+{%endif%}
+<label>{% if la == "En" %}Area{% else %}المنطقة{% endif %}</label>
+<div class="combo">
+    <select name="area">
+                          {% for area in areas %}
+            <option  value="{{area.id}}" {% if  user.area %}{% if area.id == user.area.id %}selected="selected"{% endif %}{% endif %} >{{area.getLaTitle(la)}}</option>
+                          {% endfor %}
+        </select>
+    </div><!--/.combo -->

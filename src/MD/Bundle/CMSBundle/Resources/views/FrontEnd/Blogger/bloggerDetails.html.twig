@@ -1,0 +1,143 @@
+{% extends 'FEBundle::base.html.twig' %}
+
+{% block title %}{{ entity.seo.title }}{% endblock %}
+{% block metaTag %}{{ entity.seo.metaTag }}{% endblock %}
+
+{% block ogMetaTag %}
+<meta property="og:title" content="{{ entity.title }}">
+    {% if entity.post.getMainImage %}
+<meta property="og:image" content="{{app.request.getSchemeAndHttpHost }}{{ asset("uploads/bloggers/" ~ entity.post.id ~ "/"  ~ entity.post.getMainImage.id) }}">
+    {% endif %}
+<meta property="og:description" content="{{ entity.post.content.description|raw|slice(0, 200) }} ...">
+{% endblock %}
+
+{% block content %}
+
+<div class="page_content_offset">
+    <div class="container">
+        <div class="clearfix">
+            <section class="col-lg-9 col-md-9 col-sm-12" style="padding-left: 0px;">
+
+                <article class="m_bottom_15">
+                    <div class="row clearfix m_bottom_15">
+                        <div class="col-lg-9 col-md-9 col-sm-8">
+                            <h2 class="m_bottom_5 color_dark fw_medium m_xs_bottom_10">{{ entity.title }}</h2>
+                            <p class="f_size_medium">{{ entity.created|date('d M y') }}, {{ entity.bloggerComments|length }} {% trans %}comments{% endtrans %}.</p>
+                        </div>
+                    </div>
+                    <figure class="d_block photoframe r_corners wrapper shadow m_bottom_15">
+                        {% if entity.post.getMainImage %}
+                        <img src="{{ asset("uploads/bloggers/" ~ entity.post.id ~ "/"  ~ entity.post.getMainImage.id) }}" class="tr_all_long_hover" alt="{{ entity.title }}" title="{{ entity.title }}">
+                        {% else %}
+                        <img src="{{ asset('bundles/fe/images/placeholder.png') }}" class="tr_all_long_hover" alt="{{ entity.title }}" title="{{ entity.title }}" />
+                        {% endif %}
+                    </figure>
+                    <p class="m_bottom_15">{{ entity.post.content.description|raw }}</p>
+                </article>
+                <div class="m_bottom_30">
+                    <p class="d_inline_middle">Share this:</p>
+                    <div class="d_inline_middle m_left_5 addthis_widget_container">
+                        <!-- AddThis Button BEGIN -->
+                        <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                            <a class="addthis_button_preferred_1"></a>
+                            <a class="addthis_button_preferred_2"></a>
+                            <a class="addthis_button_preferred_3"></a>
+                            <a class="addthis_button_preferred_4"></a>
+                            <a class="addthis_button_compact"></a>
+                            <a class="addthis_counter addthis_bubble_style"></a>
+                        </div>
+                        <!-- AddThis Button END -->
+                    </div>
+                </div>
+                <hr class="divider_type_3 m_bottom_10">
+                <p class="m_bottom_10">Tags: 
+                    {% for entityTag in entity.bloggerTags %}
+                        {{ entityTag.name }}
+                    {% endfor %}
+                </p>
+                <hr class="divider_type_3 m_bottom_45">
+                <h2 class="tt_uppercase color_dark m_bottom_30">{% trans %}Comments{% endtrans %}</h2>
+                <div class="m_bottom_45">
+                    {% if entity.bloggerComments %}
+                    {% for comment in entity.bloggerComments %}
+                    <div class="clearfix comment_wrap m_bottom_25">
+                        <div class="comment_content_wrap">
+                            <header class="m_bottom_5">
+                                <a href="#" class="color_dark"><b>{{ comment.name }}</b></a> - {{ comment.created|date('d M y') }}
+                            </header>
+                            <div class="comment relative bg_light_color_3 r_corners shadow">{{ comment.comment }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <!--add comment-->
+                <h2 class="tt_uppercase color_dark m_bottom_30">{% trans %}Add Comment{% endtrans %}</h2>
+                <form class="bs_inner_offsets full_width bg_light_color_3 r_corners shadow m_xs_bottom_30"  action="{{ path('fe_bloggercomment_create') }}" id="comment-form" method="post">
+                    <ul>
+                        <li class="clearfix m_bottom_15">
+                            <div class="f_left half_column f_xs_none w_xs_full p_xs_hr_0 m_xs_bottom_15">
+                                <label for="name" class="d_inline_b m_bottom_5">{% trans %}Name{% endtrans %} ({% trans %}required{% endtrans %})</label><br>
+                                <input type="text" maxlength="100" name="name" id="name" required class="r_corners full_width">
+                            </div>
+                            <div class="f_left half_column f_xs_none w_xs_full p_xs_hr_0">
+                                <label for="email" class="d_inline_b m_bottom_5">{% trans %}Email{% endtrans %} ({% trans %}required, but will not display{% endtrans %})</label><br>
+                                <input type="email" name="email" id="email" required class="r_corners full_width">
+                            </div>
+                        </li>
+                        <li class="m_bottom_15">
+                            <label for="comment" class="d_inline_b m_bottom_5">{% trans %}Comments{% endtrans %}</label><br>
+                            <textarea maxlength="5000" rows="10" name="comment" id="comment" required class="r_corners full_width comments"></textarea>
+                        </li>
+                        <li class="m_bottom_10">
+                            <button type="submit" name="action" value="SaveComment" class="r_corners button_type_4 bg_light_color_2 mw_0 color_dark tr_all_hover">{% trans %}Add Comment{% endtrans %}</button>
+                            <input type="hidden" name="slug" value="{{ entity.seo.slug }}" />
+                        </li>
+                    </ul>
+                </form>
+
+            </section>
+            <aside class="col-lg-3 col-md-3 col-sm-12 m_bottom_30">
+                <figure class="widget shadow r_corners wrapper m_bottom_30">
+                    <figcaption>
+                        <h3 class="color_light">{% trans %}Archive{% endtrans %}</h3>
+                    </figcaption>
+                    <div class="widget_content">
+                        <!--Categories list-->
+                        <ul class="categories_list">
+                            {% for year, archive  in archives %}
+                            <li class="active">
+                                <a href="#" class="f_size_large scheme_color d_block relative">
+                                    <b>{{ year }}</b>
+                                    <span class="bg_light_color_1 r_corners f_right color_dark talign_c"></span>
+                                </a>
+                                <!--second level-->
+                                <ul>
+                                    {% for month, boggers  in archive %}
+                                    <li class="active">
+                                        <a href="#" class="d_block f_size_large color_dark relative">
+                                            {{ month }} ({{ boggers|length }})<span class="bg_light_color_1 r_corners f_right color_dark talign_c"></span>
+                                        </a>
+                                        <!--third level-->
+                                        <ul>
+                                            {% for bogger in boggers %}
+                                            <li><a href="{{ path('fe_blogger_details',{'slug':bogger.seo.slug}) }}" class="color_dark d_block">{{ bogger.title }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </figure>
+                <a href="#" class="widget animate_ftr d_block r_corners m_bottom_30 spacing adv">
+                    <img src="{{ asset('bundles/fe/images/banner_img_6.jpg') }}" alt="">
+                </a>
+            </aside>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
